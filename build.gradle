@@ -76,15 +76,7 @@ android {
                 // cppFlags "-O2"
             }
         }
-    }
 
-    signingConfigs {
-        debug {
-            storeFile file('nethunter-debug.jks')
-            keyAlias 'nethunter'
-            storePassword 'nethunter'
-            keyPassword 'nethunter'
-        }
     }
 
     sourceSets {

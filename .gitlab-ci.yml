@@ -1,0 +1,78 @@
+## REF: https://hub.docker.com/r/jangrewe/gitlab-ci-android
+image: docker.io/jangrewe/gitlab-ci-android
+
+stages:
+  - build
+
+before_script:
+  - apt update && apt install -y openjdk-17-jdk
+  - export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+  - export PATH=$JAVA_HOME/bin:$PATH
+  - java -version
+  - export GRADLE_USER_HOME=$(pwd)/.gradle
+  - export PACKAGE=$(sed -n 's/.*package="\([^"]*\)".*/\1/p' ./AndroidManifest.xml)
+  - if test -z "${PACKAGE}"; then export PACKAGE=$(sed -n 's/.*applicationId[[:blank:]]*"\([^"]*\)".*/\1/p' ./build.gradle); fi
+  - export VERSION_NAME=$(sed -n 's/.*versionName[[:blank:]]*"\([^"]*\)".*/\1/p' ./build.gradle)
+  - export VERSION_CODE=$(sed -n 's/.*versionCode[[:blank:]]*\([0-9]*\).*/\1/p' ./build.gradle)
+  - export APK_NAME="${PACKAGE}_${VERSION_CODE}"
+  - chmod +x ./gradlew && mkdir -p ./result/
+  - echo $PACKAGE
+  - echo $VERSION_NAME
+  - echo $VERSION_CODE
+  - echo $APK_NAME
+
+after_script:
+  - ls result/
+  - if [ -d /tmp/result ]; then cp -v result/* /tmp/result; fi # Copy it to host if run locally
+
+# Share caches between jobs
+cache:
+  key: ${CI_PROJECT_ID}
+  paths:
+    - .gradle/
+
+.assembleDebug:
+  stage: build
+  script:
+    - set -e
+    - ./gradlew assembleDebug
+    - ls ./build/outputs/apk/debug/
+    - mv -v ./build/outputs/apk/debug/*-debug.apk ./result/${APK_NAME}-debug.apk
+  artifacts:
+    name: "$CI_COMMIT_REF_NAME-$CI_COMMIT_SHORT_SHA-$CI_JOB_NAME"
+    paths:
+      - ./result/*.apk
+    expire_in: 1 week
+
+.assembleRelease:
+  stage: build
+  script:
+    - set -e
+    - ./gradlew assembleRelease
+    - ls ./build/outputs/apk/release/
+    - mv -v ./build/outputs/apk/release/*-release-unsigned.apk ./result/${APK_NAME}.apk
+  artifacts:
+    name: "$CI_COMMIT_REF_NAME-$CI_COMMIT_SHORT_SHA-$CI_JOB_NAME"
+    paths:
+      - ./result/*.apk
+    expire_in: 1 week
+
+assembleDebugAuto:
+  extends: .assembleDebug
+  only:
+    - branches
+  except:
+    - main
+
+assembleDebugManual:
+  extends: .assembleDebug
+  when: manual
+
+assembleReleaseAuto:
+  extends: .assembleRelease
+  only:
+    - main
+
+assembleReleaseManual:
+  extends: .assembleRelease
+  when: manual

@@ -1,0 +1,1552 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NetHunter</string>
+    <string name="app_nav_home_label">NetHunter</string>
+
+    <string name="hometitle">System Information</string>
+    <!--string name="nethunter_description">Welcome to Kali Linux NetHunter by Offensive Security! This application is designed to make it easier to execute attacks and control services. The navigation menu contains links to useful commands, settings, macros, and attack configuration pages. Most configurations work out of the box but some may require some minimal tweaking.</string-->
+    <string name="nethunter_description">You can ADD, DELETE, MOVE, SEARCH, BACKUP, RESTORE and RESET your custom command item. You can also long click on the item label to EDIT the item.</string>
+    <string name="nethunter_current_interfaces">Network Interfaces</string>
+    <string name="nethunter_external_ip">External IP</string>
+    <string name="nethunter_hid_detect">HID Interfaces</string>
+    <string name="nethunter_busybox_detect">Busybox Version</string>
+    <string name="nethunter_kernelver_detect">Kernel Version</string>
+    <string name="nethunter_terminal_detect">NetHunter Terminal Status</string>
+    <string name="nethunter_howtouse_cmd">Put your own command string here, it will be run in Android environment to get the output displayed.</string>
+    <string name="nethunter_howtouse_delimiter">Put your desired delimiter string if you want to split the output into lines, default is "\\n".</string>
+    <string name="nethunter_howtouse_runoncreate">To get the output upon the fragment is created, check this option. Otherwise you have to click RUN button manually to get the output.</string>
+
+    <string name="hid_powersploit_description">The Powersploit payload provides you a choice of reverse meterpreter HTTP/S payloads. "URL to payload" should be a URL accessible to the victim machine where the larger payload is downloaded to.</string>
+    <string name="hid_windows_cmd_description">This Windows CMD payload allows you to enter raw commands to a Windows command prompt. Hitting the list menu will allow you to choose keyboard layout or UAC bypass options. </string>
+    <string name="hid_powershell_http_description">The Powershell HTTP payload allows you to download and run a generic powershell payload from a URL. The URL to payload should be in a location accessible to the victim.</string>
+
+    <!-- Terminal strings -->
+    <string name="terminal_hint_enter_command">Enter command</string>
+    <string name="terminal_send_cmd">Send</string>
+    <string name="terminal_send_command_desc">Send command</string>
+
+    <!-- KaliServices -->
+    <string name="kali_services_description">Kali Chroot services can be started and stopped via the switch toggle buttons, you can also ADD, DELETE, MOVE, SEARCH, BACKUP, RESTORE and RESET your own service item, and long click on the item label to EDIT the item as well.</string>
+    <string name="kaliservices_howto_startservice">To START a service in kali, a command will be run INSIDE KaliChroot that looks like this:\n\nbusybox chroot &lt;chroot_folder> /usr/bin/sudo &lt;command_to_start_service>\n\nService is considered STARTED if the return value is 0 and vice versa.</string>
+    <string name="kaliservices_howto_stopservice">To STOP a service in kali, a command will be run INSIDE KaliChroot that looks like this:\n\nbusybox chroot &lt;chroot_folder> /usr/bin/sudo &lt;command_to_stop_service>\n\nService is considered STOPPED if the return value is 0 and vice versa.</string>
+    <string name="kaliservices_howto_checkservice">To Check if a service in kali is up or not, a command will be run OUTSIDE KaliChroot that looks like this:\n\nbusybox ps -o pid,comm | grep -w \'&lt;service_name>\'\n\nService is considered UP if the return value is 0 and vice versa.</string>
+    <string name="kaliservices_howto_runServiceOnBoot">To automatically start the service after Kali Chroot is up, check this option.</string>
+
+    <!-- Modules -->
+    <string name="modules_description">Manage kernel modules, if your kernel has any supported. Most devices use all drivers as inbuilt. For information (modinfo) click and hold selected module for menu.</string>
+
+    <!-- CustomCommands -->
+    <string name="custom_commands_description">You can ADD, DELETE, MOVE, SEARCH, BACKUP, RESTORE and RESET your custom command item. You can also long click on the item label to EDIT the item.</string>
+    <string-array name="custom_commands_sendto_array">
+        <item>android</item>
+        <item>kali</item>
+    </string-array>
+    <string-array name="custom_commands_execmode_array">
+        <item>interactive</item>
+        <item>background</item>
+    </string-array>
+
+    <!-- USB Arsenal -->
+    <string name="drawertitleusbarsenal">USB Arsenal</string>
+    <string name="usbarsenal_hint1_imagemounter">*Place all your .img or .iso files in "/sdcard/nh_files/diskimage/"</string>
+    <string name="usbarsenal_current_usb_state">Current USB state: </string>
+    <string name="usbarsenal_description">Select your desired USB Arsenal function here. If the functions are blank, try removing the init file using the top right menu. Some targets may need time to enable HID drivers on first try.</string>
+    <string name="usbarsenal_header">USB Function Selector</string>
+    <string name="usbarsenal_enabledfunctions">USB functions currently enabled:</string>
+    <string name="usbarsenal_nofunctionsenabled">No USB function is currently enabled</string>
+    <string name="usbarsenal_imagemounter_header">Image Mounter</string>
+    <string name="usbarsenal_imagemounter_description">Image Mounter can be used only if the USB function \"mass_storage\" has been enabled</string>
+    <string name="usbarsenal_networktethering_header">USB Network Tethering</string>
+    <string name="usbarsenal_networktethering_description">USB NetWork Tethering can be used only if the USB function \"rndis\" or \"acmecm\" has been enabled</string>
+    <string name="usbarsenal_usbexfiltration_header">USB Exfiltration</string>
+    <string name="usbarsenal_usbexfiltration_open">Open USB Exfiltration</string>
+    <string-array name="usbarsenal_target_platform">
+        <item>Windows</item>
+        <item>Linux</item>
+        <item>Mac OS</item>
+    </string-array>
+    <string-array name="usbarsenal_usb_states_win_lin">
+        <item>reset</item>
+        <item>hid</item>
+        <item>mass_storage</item>
+        <item>rndis</item>
+        <item>hid,mass_storage</item>
+        <item>rndis,hid</item>
+        <item>rndis,mass_storage</item>
+        <item>rndis,hid,mass_storage</item>
+    </string-array>
+    <string-array name="usbarsenal_usb_states_mac">
+        <item>reset</item>
+        <item>hid</item>
+        <item>mass_storage</item>
+        <item>acm,ecm</item>
+        <item>hid,mass_storage</item>
+        <item>acm,ecm,hid</item>
+        <item>acm,ecm,mass_storage</item>
+        <item>acm,ecm,hid,mass_storage</item>
+    </string-array>
+    <string-array name="usbarsenal_usb_adb">
+        <item>Enable</item>
+        <item>Disable</item>
+    </string-array>
+    <string-array name="usbarsenal_usb_network_attack_mode">
+        <item>Network Tethering Only</item>
+    </string-array>
+
+    <!-- Bad USB -->
+    <string name="badusb_label">BadUSB MITM Attack</string>
+    <string name="badusb_description">This is our implementation of the BadUSB attack as demonstrated at Black Hat USA 2014. Enabling this USB gadget mode will allow your device to act as a USB network interface when plugged into a target computer. Connecting the USB cable to a PC will force all traffic from that PC (Windows or Linux) through the NetHunter device, where the traffic can be MITM\'ed.</string>
+    <string name="wifipumpkin_description">Start an Evil-Twin Access Point and intercept HTTP traffic. Custom captive portals, featuring mobile network upstream (rmnet_data*), internal wlan0 upstream, internal wlan0/wlan1 AP mode, and external adapters.</string>
+    <string name="mana_hostapd_wpe">The hostapd configuration file used for 802.1x/EAP authentication attack (hostapd-wpe)  This is not used with MANA.</string>
+    <string name="mana_hostapd_wpe_certs">Generate certificates (1st time only)</string>
+    <string name="mana_dhcpd">The dhcpd configuration file used by Mana.</string>
+    <string name="mana_dnsspoof">The dnsspoof configuration file used by Mana.</string>
+    <string name="mana_nat_full">The Mana script that does full NAT &amp; SSL interception.</string>
+    <string name="mana_nat_simple">The Mana script that does full NAT only.</string>
+    <string name="mana_nat_simple_bdf">The Mana script that does full NAT &amp; BDFProxy HTTP routing to port 8080.</string>
+    <string name="bdfproxy_cfg">The configuration file for BDFProxy.</string>
+    <string name="mana_bettercap_description">Route traffic to bettercap proxy with Mana-toolkit</string>
+    <string name="hostapd_private_key">Private Key Password</string>
+
+    <string name="select_language">Language</string>
+    <string name="duckConvertAttack">Attack</string>
+    <string name="duck_hunter_headline">The DuckHunter script can easily convert "USB Rubber Ducky" scripts into NetHunter HID format.  You can generate preconfigured scripts at the incredibly useful <a href="http://www.ducktoolkit.com/Home.jsp">Ducky Toolkit</a> site, or check out the Rubber Ducky script syntax from the official <a href="https://github.com/hak5darren/USB-Rubber-Ducky/wiki/Duckyscript">README</a></string>
+    <string-array name="duckhunter_preset_array">
+        <item>Select preset</item>
+        <item>Hello World</item>
+        <item>OSX Perl Reverse Shell</item>
+        <item>OSX Ruby Reverse Shell</item>
+        <item>Enable Windows RDP</item>
+        <item>Fake Windows 10 Update</item>
+    </string-array>
+
+    <string name="payload_select">Please select</string>
+    <string-array name="payloads">
+        <item>windows/meterpreter/reverse_http</item>
+        <item>windows/meterpreter/reverse_https</item>
+    </string-array>
+
+    <string name="source">Edit source</string>
+    <string name="source_hint">…</string>
+
+    <string name="start_badusb">Start BadUSB attack</string>
+    <string name="stop_badusb">Stop BadUSB attack</string>
+
+    <string name="launch_kali_menu">Launch Kali Menu in Terminal</string>
+    <string name="launch_kali_shell">Launch Kali Shell in Terminal</string>
+    <string name="launch_wifite">Launch Wifite</string>
+    <string name="update_kali_chroot">Update Kali chroot</string>
+    <string name="turn_off_external_wifi">Turn Off External Wifi</string>
+
+
+    <string name="update">Update</string>
+    <string name="load">Load</string>
+    <string name="save">Save</string>
+    <string name="execute_attack">Execute Attack</string>
+
+    <string name="stop_mana">Stop mana</string>
+    <string name="start_mana">Start mana</string>
+    <string name="bssid">BSSID</string>
+    <string name="ssid">SSID</string>
+    <string name="chanel">Channel</string>
+    <string name="enable_karma">Enable karma</string>
+    <string name="admin">UAC Bypass</string>
+    <string name="choose_language">Keyboard Layout</string>
+    <string name="reset_usb">Reset USB</string>
+
+    <!-- Macchanger -->
+    <string name="iface">Interface</string>
+    <string name="payload">Payload</string>
+    <string name="loading_service">Loading service state</string>
+    <string name="get_external_ip">Get external IP</string>
+    <string name="karma_loud">karma loud</string>
+
+    <string name="ps_ip_address">IP Address (LHOST)</string>
+    <string name="ps_port">Port (LPORT)</string>
+    <string name="ps_payload_url">URL to payload</string>
+
+    <string name="toast_error_permissions">NetHunter App does not have permission to send to NetHunter terminal!</string>
+    <string name="toast_install_terminal">Error launching intent. Install Android Terminal!</string>
+    <string name="descriptiontext" />
+
+    <string name="macchanger_description">**Important: Android 10 has MAC Randomization provided already, but if you still want to set a custom mac address yourself, the following criteria are required:\n1. Enable the \'Use randomised MAC\' on each SSID you connect to.\n2. The AP you want to connect to must be connected with a correct password before.\nAs Manually connect to a AP will lose the changed mac.</string>
+    <string name="interface_select">Pick an interface:</string>
+    <string name="macchanger_select">Select macchanger mode:</string>
+    <string name="reset_mac">Reset wlan0 MAC address</string>
+    <string name="currentmac">Current MAC:</string>
+    <string name="TwoMACDigits">XX</string>
+    <string name="macSeparator">:</string>
+    <string name="changeMAC">Change MAC</string>
+    <string name="resetMAC">Reset MAC</string>
+    <string name="reloadMAC">Reload MAC</string>
+    <string name="randomMAC">Random MAC</string>
+    <string name="customMAC">Custom MAC</string>
+    <string name="autorunningscripts">NetHunter: auto-running startup scripts</string>
+    <string name="toastForNoBusybox">Uh oh! NetHunter can\'t find busybox!</string>
+    <string name="readonly">Read-only</string>
+    <string-array name="macchanger_opts">
+        <item>Random MAC</item>
+        <item>Custom MAC</item>
+    </string-array>
+    <string-array name="interface_opts">
+        <item>wlan0 (Internal wireless card)</item>
+        <item>wlan1 (External wireless card)</item>
+        <item>eth0 (Ethernet)</item>
+        <item>rndis0 (USB > Ethernet)</item>
+        <item>usb0 (USB > Ethernet Nexus7 2013 when tethering | badusb)</item>
+    </string-array>
+
+    <!-- USB Army(Not in use yet) -->
+    <string-array name="usb_states">
+        <item>Reset</item>
+        <item>mtp,hid</item>
+        <item>hid</item>
+        <item>mass_storage</item>
+        <item>rndis</item>
+        <item>hid,mass_storage</item>
+        <item>rndis,hid</item>
+        <item>rndis,mass_storage</item>
+        <item>rndis,hid,mass_storage</item>
+    </string-array>
+    <string-array name="usb_targets">
+        <item>Windows</item>
+        <item>Mac OS</item>
+    </string-array>
+    <string-array name="usb_adb">
+        <item>No adb</item>
+        <item>adb</item>
+    </string-array>
+
+    <!-- KeX -->
+    <string name="kex_description">Welcome to the Kali NetHunter Desktop Experience!\n\nEnjoy the full potential of Kali Linux, straight from your pocket, even on HDMI output. Audio supported, Use the Audio Manager to stream sound through KeX.</string>
+
+    <!-- BT Attacks -->
+    <string name="bt_description">Welcome to BT Arsenal! Internal BT support is available for devices with RFCOMM, UART H4, VHCI and BINDER_IPC enabled in kernel, or devices with bt_smd driver. Some devices need turning Airplane Mode on before starting bluebinder.</string>
+    <string name="bt_carwhisperer">Carwhisperer script from the way back. Listen to, or inject audio to various devices like speakers, headsets, watches or even cars. Carwshisperer is not supported by internal bluetooth (VHCI or bt_smd) yet.</string>
+    <string name="bt_spoof">Spoof your BT adapters address, class, and name.</string>
+    <string name="bt_tools">Brute force BT device addresses, ping, and discover their services.</string>
+    <string name="bt_badbt">Inspired by the Mr.Robot police car scene and the Flipper XFW Team, you can now create a Bluetooth keyboard server and send keystrokes straight from NetHunter. You may need to run setup again from the top right menu to install BadBT. Running this on a smartwatch against your paired phone may despair your watch from phone/wearos app. Prefixes are experimental.</string>
+
+    <!-- SET -->
+    <string name="set_description">Social Engineering Toolkit email template builder by yesimxev. Please note you need to have a working Gmail or email relay configuration for SET in order to use these templates. It is recommended not to have account picture if you use Gmail.</string>
+
+    <!-- WPS -->
+    <string name="wps_description">OneShot performs WPS PIN and Pixie Dust attack without having to switch to monitor mode. Note that if scan is empty, you might need to reset your interface.</string>
+
+    <!-- Settings -->
+    <string name="settings_description">Select your desired boot animation here. Please note that some older phones prefer 90% the size of original screen resolution, so it can run smoothly. In that case, tick convert, then set image resolution and final resolution together.</string>
+
+    <!-- Kernel -->
+    <string name="kernel_description">Find a kernel for your device and flash via Magisk. If your device doesn\'t support runtime flashing, flash the kernel through recovery. If your device\'s actual codename not found automatically in the kernels repo, use the list below to browse available device codenames.</string>
+
+    <!-- chroot stuff -->
+    <array name="f_chrootmanager_build_chroot_arm_opts">
+        <item>arm64</item>
+        <item>armhf</item>
+    </array>
+    <array name="f_chrootmanager_build_chroot_full_or_min">
+        <item>full</item>
+        <item>min</item>
+    </array>
+
+    <string name="thechroottitle">The Kali chroot</string>
+    <string name="installkalichrootbutton">Install Kali Chroot</string>
+    <string name="removekalichrootbutton">Remove Chroot</string>
+    <string name="MaintainChrootInTerminal">Add Metapackages</string>
+    <string name="existingchrootfound">An existing Kali chroot directory was found!</string>
+    <string name="nokalichrootfound">No Kali chroot directory was found.</string>
+    <string name="reallyremovechroot">Really remove the chroot?</string>
+    <string name="nogoingback">There\'s no going back.  You lose everything in your chroot.  Forever-ever.\n\nNOTE:  To fully ensure the chroot is not mounted and no processes are using it, <b><u>THE DEVICE WILL NOW BE REBOOTED</u></b>, then the chroot will be deleted.</string>
+    <string name="rebootbutton">Reboot and remove chroot</string>
+    <string name="chickenoutbutton">Forget it</string>
+    <string name="rebootingdialogtitle">Rebooting the device&#8230;</string>
+    <string name="rebootingdialogbody">The device is being restarted. (No complaining.  You were just told this would happen!)</string>
+    <string name="deletingforroom">Deleting to make room for download&#8230;</string>
+    <string name="problemdeletingoldfile">Problem deleting old file.  Just sayin\'.</string>
+    <string name="startingdownload">Starting download.  Standby&#8230;</string>
+    <string name="unwritablestorageerror">Nowhere to write to.  Make sure you have your external storage mounted and available.</string>
+    <string name="checkingforchroot">"Checking for chroot at "</string>
+    <string name="toastchrootmountedwarning">Kali chroot is mounted and NOT deleted.  Reboot again to remove!!</string>
+    <string name="toastdeletingchroot">Deleting Kali chroot&#8230;</string>
+    <string name="toastdeletedchroot">Kali chroot has been deleted.</string>
+    <string name="toastmigratingchroot">Migrating Kali chroot&#8230;</string>
+    <string name="toastmigratedchroot">Kali chroot has been migrated.</string>
+    <string name="unzippinguntarringdone">Unzipping &amp; untarring done.</string>
+    <string name="unzippinganduntarring">Unzipping and untarring....</string>
+    <string name="downloadfailscheck">Something went wrong verifying the downloaded file.  Whoops.  Try again.</string>
+    <string name="aboutchroot">This is Chroot Manager for Kali. The \"chroot\" is a full installation of Kali Linux that shares processing, networking, storage, and other resources with Android. It resides in your internal app storage area and is required to have at least 8 Gb free space for the minimal or full installation, just to make sure it won\'t break your system.</string>
+    <string name="extractinganddeploying">Extracting and Deploying</string>
+    <string name="nhwarning">WARNING:\nNetHunter installs and uses a standard Kali Linux distribution "under the hood" .  To support this functionality, some <u>standard Android security features such as Security Enhanced Linux (SELinux) are disabled</u>.  Moreover, Kali\'s Linux processes may run with full root privileges and can therefore access system functionality well beyond the normal Android security model.  Consider therefore that this device, as a hybrid, may not be as secure as either standard Kali Linux OR standard Android, and you are advised not to install or use Nethunter on "daily driver" devices or devices which store or access sensitive/private data.</string>
+    <string name="nhteam">DEVELOPERS:\ngitlab.com/groups/kalilinux/nethunter/-/group_members</string>
+    <string name="unknown">Unknown</string>
+    <string name="statusText">Status:</string>
+    <string name="licenseInfo">LICENSE INFO:\nNetHunter is licensed under the GPLv2 (gnu.org/licenses/old-licenses/gpl-2.0.en.html) and the source code is available at gitlab.com/kalilinux/nethunter.\n Some icons are licensed from Google, Inc. under CC BY 4.0 (creativecommons.org/licenses/by/4.0). Android-VersionManager and jTar are licensed under Apache 2.0.  </string><string name="attack_launched">Attack launched!</string>
+    <string name="chroot_manager_restore">Restore</string>
+
+    <!-- sidebar menu item titles -->
+    <string name="drawertitlenethunter">Home</string>
+    <string name="drawertitlecreatechroot">Kali Chroot Manager</string>
+    <string name="drawertitlecheckupdate">Check App Update</string>
+    <string name="drawertitlekaliservices">Kali Services</string>
+    <string name="drawertitlecustomcommands">Custom Commands</string>
+    <string name="drawertitlemacchanger">MAC Changer</string>
+    <string name="drawertitlevncmanager">KeX Manager</string>
+    <string name="drawertitleaudio">Audio Manager</string>
+    <string name="drawertitlehid">HID Attacks</string>
+    <string name="drawertitleduckhunter">DuckHunter HID</string>
+    <string name="drawertitlebadusb">Bad USB MITM Attack</string>
+    <string name="drawertitlewifipumpkin">Wifipumpkin</string>
+    <string name="drawertitlewps">WPS Attacks</string>
+    <string name="drawertitlebt">Bluetooth Arsenal</string>
+    <string name="drawertitlenfc">NFC Arsenal</string>
+    <string name="drawertitlenmap">Nmap Scan</string>
+    <string name="drawertitlempc">Metasploit Payload Generator</string>
+    <string name="drawertitlesearchsploit">SearchSploit</string>
+    <string name="drawertitlepineapple">Pineapple Connector</string>
+    <string name="drawertitlegps">Wardriving</string>
+    <string name="drawertitlecan">CARsenal</string>
+    <string name="drawertitlewearhunter">WearHunter</string>
+    <string name="drawertitlesettings">Settings</string>
+    <string name="drawertitlekernel">Kernel</string>
+    <string name="drawertitlemodules">Modules</string>
+    <string name="drawertitleset">SET</string>
+    <string name="InstallAndUpdateButtonText"><![CDATA[Install & Update]]></string>
+    <string name="metapackagesExplanation">Choose some "metapackages". The chroot will also be upgraded (via "apt-get update/dist-upgrade").\n\nSelecting metapackages you already have installed (or no packages at all) simply update/upgrades without removing anything.\n\nDepending on what metapackages you select, you may be asked to do stuff (such as set passwords for services), so pay attention.</string>
+    <string name="metapackagesAdditionalInfo">Local storage requirements may be in the 20+ GB range. This installation/update will be performed in a terminal, so watch for issues. When completed, press the back button.</string>
+    <string name="rootdialogmessage">Whoopsy daisy!  NetHunter requires elevated administrator (root) privileges.\n\nMake sure root access is available.\n\nIf you touched the deny button by error, go to SuperSU app, find NetHunter in the APPS tab, and allow access (grant).\n\nDepending on your version of Android, this may require a "rooting" procedure to install the <tt>su</tt> binary.\n\nOn LineageOS or LS-based Android, you may need to go to your device <b>Settings</b>, and under <b>Developer Options</b>, enable <b>Root access</b> for <b>Apps</b>.\n\nAdditionally, you will need to make sure <tt>busybox</tt> is installed, usually to <tt>/system/xbin/busybox</tt>.</string>
+    <string name="rootdialogtitle">Missing root/busybox</string>
+    <string name="rootdialogposbutton">Try again</string>
+    <string name="rootdialognegbutton">Quit</string>
+
+    <string name="legacychroottitle">Legacy chroot found!</string>
+    <string name="legacychrootmessage">You appear to already have an existing Kali chroot from an older version of Nethunter.\n\nMigrating it to its new location requires a reboot.\n\n Or, you can leave the old chroot alone and install a new chroot.  If you choose this option, make sure you have enough storage for both.</string>
+    <string name="legacychrootposbutton">Migrate (reboot)</string>
+    <string name="legacychrootnegbutton">Ignore current</string>
+
+    <!-- MPC -->
+    <string name="mpc_description">MSFvenom Payload Creator (MSFPC) is a wrapper written by g0tmi1k to generate multiple types of payloads, based on users choice. The idea is to be as simple as possible (only requiring one input) to produce their payload.</string>
+    <string name="mpc_type">Type:</string>
+    <string-array name="mpc_type_array">
+        <item>ASP</item>
+        <item>ASPX</item>
+        <item>Bash [.sh]</item>
+        <item>Java [.jsp]</item>
+        <item>Linux [.elf]</item>
+        <item>OSX [.macho]</item>
+        <item>Perl [.pl]</item>
+        <item>PHP</item>
+        <item>Powershell [.ps1]</item>
+        <item>Python [.py]</item>
+        <item>Tomcat [.war]</item>
+        <item>Windows [.exe/.dll]</item>
+        <item>Android [.apk]</item>
+    </string-array>
+    <string name="mpc_port">Port:</string>
+    <string name="mpc_port_default">443</string>
+    <string name="mpc_ip_address">IP Address:</string>
+    <string name="mpc_payload">Payload Options:</string>
+    <string-array name="mpc_payload_array">
+        <item>MSF</item>
+        <item>CMD</item>
+    </string-array>
+    <string-array name="mpc_callback_array">
+        <item>Reverse</item>
+        <item>Bind</item>
+    </string-array>
+    <string-array name="mpc_stage_array">
+        <item>Staged</item>
+        <item>Stageless</item>
+    </string-array>
+    <string-array name="mpc_callbacktype_array">
+        <item>TCP</item>
+        <item>HTTP</item>
+        <item>HTTPS</item>
+        <item>Find Port</item>
+    </string-array>
+    <string name="mpc_generateSDCARD">Generate to SDCARD</string>
+    <string name="mpc_generateHTTP">Generate to HTTP</string>
+
+    <!-- SearchSploit -->
+    <string name="searchsploit_searchbar">Search Exploits</string>
+
+    <!-- Custom Launcher -->
+    <string name="add_lauchner_btn_label">Label: </string>
+    <string name="add_lauchner_btn_command">Command: </string>
+    <string name="toast_input_error_launcher">Invalid arguments given!</string>
+    <string name="installing_notice">Installing Chroot…</string>
+    <string name="drawer_opened">Drawer opened</string>
+    <string name="drawer_closed">Drawer closed</string>
+    <string-array name="exec_mode">
+        <item>BACKGROUND</item>
+        <item>INTERACTIVE</item>
+    </string-array>
+    <string-array name="run_in_shell">
+        <item>KALI</item>
+        <item>ANDROID</item>
+    </string-array>
+    <string name="cancel">Cancel</string>
+    <string name="extract_chroot">Decompressing and deploying the Chroot… (~5–10 min)</string>
+
+    <!-- Start NMAP -->
+    <string name="nmap_hint">scanme.nmap.org, 192.168.0.1; 10.0.0–255.1&#8211;254</string>
+    <string-array name="nmap_interface_array">
+        <item>Select interface</item>
+        <item>wlan0</item>
+        <item>wlan1</item>
+        <item>eth0</item>
+        <item>rndis0</item>
+    </string-array>
+    <string name="nmap_all">Enable OS version detect, script scan, and traceroute</string>
+    <string name="nmap_ipv6">Enable IPv6</string>
+    <string name="nmap_timing_template">Timing Template</string>
+    <string-array name="nmap_timing_array">
+        <item>Select timing template</item>
+        <item>Paranoid</item>
+        <item>Sneaky</item>
+        <item>Polite</item>
+        <item>Normal</item>
+        <item>Aggressive</item>
+        <item>Insane</item>
+    </string-array>
+    <string name="nmap_ports">Ports</string>
+    <string name="nmap_fastmode">Fast mode (fewer ports)</string>
+    <string name="nmap_dontrandomize">Don\'t randomize port scan</string>
+    <string name="nmap_topports">Top 20 Ports</string>
+    <string name="nmap_osdetectenable">Enable OS detection</string>
+    <string name="nmap_servicedetect">Service/Version Detection</string>
+    <string name="nmap_hostdiscovery_ping">Ping Scan</string>
+    <string name="nmap_scan_technique">Scan Techniques</string>
+    <string-array name="nmap_scantechnique_array">
+        <item>Select scan technique</item>
+        <item>TCP SYN</item>
+        <item>Connect()</item>
+        <item>ACK</item>
+        <item>Windows</item>
+        <item>Maimon</item>
+        <item>TCP Null</item>
+        <item>FIN</item>
+        <item>XMAS</item>
+    </string-array>
+    <string name="nmap_udpscan">UDP Scan</string>
+    <!-- End NMAP -->
+
+    <!-- Start PineappleFragment -->
+    <string name="pineapple_description">The pineapple connector is used in conjunction with the Hak5 Pineapple Nano and a USB OTG cable.   This helper will connect the Pineapple Nano over ethernet and upstream your wifi connection.</string>
+    <string name="pineapple_gateway">Pineapple Gateway/Web Interface IP</string>
+    <string name="pineapple_port">Pineapple Nano Web Port</string>
+    <string name="pineapple_ip">Client IP</string>
+    <string name="pineapple_cidr">Pineapple CIDR</string>
+    <string name="pineapple_start_OTG">Setup Connection</string>
+    <string name="pineapple_stop_OTG">Close Connection</string>
+    <string name="pineapple_noupstream">No upstream</string>
+    <string name="pineapple_transproxy">Forward port 80/443 to 8080/8083</string>
+    <string name="pineapple_subnet">172.16.42.0/24</string>
+    <string name="pineapple_webport">1471</string>
+    <string name="pineapple_gatewayip">172.16.42.1</string>
+    <string name="pineapple_clientip">172.16.42.42/24</string>
+    <!-- End PineappleFragment -->
+
+    <!-- Start GPSFragment -->
+    <string name="switch_gps_provider">Android GPS Provider</string>
+    <string name="switch_gpsd">GPSD in chroot</string>
+    <string name="switch_nexmon">Nexmon support</string>
+    <string name="gps_button_launch_app">Launch %s in NH Terminal</string>
+    <string name="gps_description">Converts your GPS to NMEA then provides to Kali chroot. Perfect for wardriving with Kismet or just a generic GPS server for Kali. Select your desired datasources. Make sure your wireless interface is in monitor mode before starting Kismet. Internal wireless interfaces can also be used thanks to the monitor mode by QCACLD-3.0 driver.</string>
+    <string name="gps_help">You may need to give NetHunter permissions to GPS. Go to Settings > Apps > NetHunter > Permissions.</string>
+    <string name="loading_wait">Loading wait…</string>
+    <string name="loading_file">Loading…  FILE: %s</string>
+    <string name="scanButtonText">Scan</string>
+    <string name="advancedOptionsSwitchText">Advanced Options</string>
+    <string name="objects_to_inject">Objects to Inject</string>
+    <string name="inject_characteristics">Inject Characteristics</string>
+    <string name="shellshock_command">Shellshock command</string>
+    <string name="inject_settings">Inject Settings</string>
+    <string name="gps_notification_lat">"Lat: "</string>
+    <string name="gps_notification_long">"Long: "</string>
+    <string name="gps_notification_accuracy">"+/- "</string>
+    <string name="gps_notification_source">"Source: "</string>
+    <string name="gps_notification_age">"Age: "</string>
+    <string name="gps_notification_sats">"Sats: "</string>
+
+    <!--Notification Channel-->
+    <string name="boot_notification_channel">Boot</string>
+    <string name="boot_notification_channel_description">Notification for run at boot services</string>
+
+    <!--Custom Spinner Array-->
+    <string-array name="array_move_position">
+        <item>Before:</item>
+        <item>After:</item>
+    </string-array>
+
+    <string-array name="array_insert_position">
+        <item>Insert to Top</item>
+        <item>Insert to Bottom</item>
+        <item>Insert Before:</item>
+        <item>Insert After:</item>
+    </string-array>
+
+    <!-- dummy_accessibility_service -->
+    <string name="dummy_accessibility_service">dummy_accessibility_service</string>
+    <string name="bootanimation_path_not_found">Bootanimation path not found</string>
+    <string name="launch_kismet_nhterm">Launch Kismet in NH Terminal</string>
+    <string name="list_of_available_folders">\n List of available folder(s) in\n\"%s/\":\n\n</string>
+    <string name="not_yet_installed">Not yet installed!</string>
+    <string name="running">Running!</string>
+    <string name="stopped">Stopped</string>
+    <string name="launch_kismet">Launch Kismet</string>
+    <string name="full_path_to_where_you_want_to_save_the_database">Full path to where you want to save the database:</string>
+    <string name="full_path_of_the_db_file_from_where_you_want_to_restore2">Full path of the db file from where you want to restore:</string>
+    <string name="download_latest_kali_chroot_from_official_image">Download latest Kali chroot from official image</string>
+    <string name="download_latest_kali_chroot_from_official_image2">Download latest Kali chroot from official image</string>
+    <string name="type_the_full_path_of_your_kali_chroot_tarball_file">Type the full path of your Kali Chroot tarball file:</string>
+    <string name="long_press_to_manage_a_command_dont_forget_to_backup_use_double_quotes_if_needed">Long press to manage a command, dont forget to backup!. Use double quotes if needed.</string>
+    <string name="search_command">search command</string>
+    <string name="add_command">Add Command</string>
+    <string name="add">Add</string>
+    <string name="delete">Delete</string>
+    <string name="move">Move</string>
+    <string name="not_supported">Not supported</string>
+    <string name="supported">Supported</string>
+    <string name="setup_done_key">wp3_setup_done</string>
+    <string name="good">Good</string>
+    <string name="nope">Nope</string>
+    <string name="wpe_description">wpe_description</string>
+    <string name="change_path">Change path</string>
+    <string name="data_local_nhsystem">/data/local/nhsystem/</string>
+    <string name="kali_arm64">kali-arm64</string>
+    <string name="loading_dot_dot_dot">Loading …</string>
+    <string name="chroot_manager_install">Install</string>
+    <string name="chroot_manager_add_metapackage">Add Metapackage</string>
+    <string name="chroot_manager_backup">Backup</string>
+    <string name="chroot_manager_start">Start</string>
+    <string name="chroot_manager_stop">Stop</string>
+    <string name="chroot_manager_remove">Remove</string>
+
+    <!-- Nethunter Audio -->
+    <string name="module_name">NetHunter Audio</string>
+    <string name="audio_description">This module allow Chroot audio playback to Android environment over local server, ensuring seamless playback of HQ-Audio output through the main speakers.</string>
+    <string name="auto_start">Auto Start</string>
+    <string name="playback_service_status">NH Playback %1$s</string>
+    <string name="playback_status_starting">Starting</string>
+    <string name="playback_status_buffering">Buffering</string>
+    <string name="playback_status_playing">Playing</string>
+    <string name="playback_status_stopping">Stopping</string>
+    <string name="playback_status_stopped">Stopped</string>
+    <string name="playback_service_label">PulseDroid Playback</string>
+    <string name="service_notification_channel">pulsedroid_service</string>
+    <string name="btn_play">Play</string>
+    <string name="btn_starting">Starting…</string>
+    <string name="btn_buffering">Buffering…</string>
+    <string name="btn_stop">Stop</string>
+    <string name="btn_stopping">Stopping…</string>
+    <string name="btn_waiting">Waiting…</string>
+    <string name="btn_exit">Exit</string>
+    <string name="input_port">Port</string>
+    <string name="input_host">Host</string>
+    <string name="play_error">Playback error:\n%1$s</string>
+    <string name="buffer_infinite">infinite</string>
+    <string name="buffer_none">none</string>
+    <string name="input_buffer_headroom">Buffer headroom</string>
+    <string name="input_target_latency">Target latency</string>
+    <string name="builderinfo">IamCOD3X</string>
+    <string name="build_version">1.0</string>
+    <string name="moduleInfo">Module Based on PulseDroid by dront78</string>
+
+    <string name="duckhunter_conversion_failed">Conversion failed.</string>
+
+    <!-- AUDIO -->
+    <string name="audio_service_not_connected">Service not connected yet. Please wait.</string>
+    <string name="audio_serverinput">127.0.0.1</string>
+    <string name="audio_portinput">8000</string>
+    <string name="audio_service_not_bound">Service not bound. Please try again.</string>
+    <string name="error_title_empty">services_error_title_empty</string>
+    <string name="expand_collapse">audio_expand_collapse</string>
+
+    <!-- VNC -->
+    <string name="vnc_watch_status">Status:</string>
+    <string name="vnc_watch_sessions">Sessions:</string>
+    <string name="vnc_hide_advanced_settings">HIDE ADVANCED SETTINGS</string>
+    <string name="vnc_disable_audio">Disable audio</string>
+    <string name="vnc_enable_audio">Enable audio</string>
+    <string name="vnc_hide_advanced_settings2">HIDE ADVANCED SETTINGS</string>
+    <string name="vnc_show_advanced_settings">SHOW ADVANCED SETTINGS</string>
+    <string name="vnc_stopped">STOPPED</string>
+    <string name="vnc_kexuser_none">None</string>
+    <string name="vnc_running">RUNNING</string>
+    <string name="vnc_enable_audio2">Enable audio</string>
+    <string name="vnc_disable_audio2">Disable audio</string>
+
+    <!-- MACCHANGER -->
+    <string name="macchanger_generate">GENERATE</string>
+    <string name="macchanger_clear">CLEAR</string>
+    <string name="macchanger_set_hostname">Set Hostname</string>
+    <string name="macchanger_current_hostname">Current Hostname:</string>
+
+    <!-- SERVICES -->
+    <string name="kaliservices_full_path_save_db">Full path to where you want to save the database:</string>
+    <string name="kaliservices_full_path_restore_db">Full path of the db file from where you want to restore:</string>
+    <string name="service_servicename_start"><![CDATA[service <servicename> start]]></string>
+    <string name="service_servicename_stop"><![CDATA[service <servicename> stop]]></string>
+    <string name="service_servicename"><![CDATA[<servicename>]]></string>
+
+    <!-- BLUETOOTH (BT) -->
+    <string name="bt_interface">Interface</string>
+    <string name="bt_service">BT Service</string>
+    <string name="bt_smd">Bluetooth SMD</string>
+    <string name="bt_stopped">Stopped</string>
+    <string name="bt_start">Start</string>
+    <string name="bt_running">Running</string>
+    <string name="bt_stop">Stop</string>
+    <string name="bt_enabled">Enabled</string>
+    <string name="bt_disabled">Disabled</string>
+    <string name="bt_up">Up</string>
+    <string name="bt_down">Down</string>
+    <string name="bt_badbt_string_rickroll">https://www.youtube.com/watch?v=dQw4w9WgXcQ</string>
+    <string name="bt_badbt_string_fakeupdate">iexplore -k http://fakeupdate.net/win10ue</string>
+
+    <!-- WPS -->
+    <string name="wps_wireless_interface">Wireless interface:</string>
+    <string name="wps_scan">Scan</string>
+    <string name="wps_reset_interface">Reset interface</string>
+    <string name="wps_pixie_dust">Pixie Dust</string>
+    <string name="wps_pixie_force">Pixie Force</string>
+    <string name="wps_online_bruteforce">Online Bruteforce</string>
+    <string name="wps_custom_pin">Custom PIN</string>
+    <string name="wps_delay">Delay</string>
+    <string name="wps_wps_button">WPS Button</string>
+    <string name="wps_pin">PIN:</string>
+    <string name="wps_wpspin_hint">12345678</string>
+    <string name="wps_delay2">Delay:</string>
+    <string name="wps_delaytime_hint">1</string>
+    <string name="wps_seconds">seconds</string>
+    <string name="wps_launch_attack">Launch attack</string>
+
+    <!-- KERNEL -->
+    <string name="kernel_flash_warning">
+    ⚠️ WARNING: Flashing a custom kernel may make your device unbootable or in worst case scenario; permanently brick your device if not done correctly. Always ensure you have a full backup of your current kernel and system before proceeding. Proceed at your own risk.
+    </string>
+    <string name="kernel_device_details">Device details</string>
+    <string name="kernel_info_dialog">Info</string>
+    <string name="kernel_device">Device:</string>
+    <string name="kernel_loading">Loading ..</string>
+    <string name="kernel_codename">Codename:</string>
+    <string name="kernel_android">Android:</string>
+    <string name="kernel_custom_codename">Select device</string>
+    <string name="kernel_device_codename">Device codename</string>
+    <string name="kernel_check">Search</string>
+    <string name="kernel_select_kernel_to_flash">Select kernel to flash</string>
+    <string name="kernel_kernel_nethunter_zip">/sdcard/kernel_nethunter.zip</string>
+    <string name="kernel_dots">…</string>
+    <string name="kernel_flash_kernel">Flash kernel</string>
+    <string name="wifi_status">wifi_status</string>
+
+    <!-- CHROOTMGR -->
+    <string name="chrootmgr_download_latest">Download latest Kali chroot</string>
+    <string name="chrootmgr_install_from_local_storage">Install from local storage</string>
+
+    <!-- MODULES -->
+    <string name="modules_path">Modules path</string>
+    <string name="modules_system_lib_path">/system/lib/modules</string>
+    <string name="modules_lsmod">lsmod</string>
+    <string name="modules_refresh">Refresh</string>
+    <string name="modules_available_modules">Available modules</string>
+    <string-array name="sort_options">
+        <item>Alphabetical</item>
+        <item>Reverse Alphabetical</item>
+    </string-array>
+
+    <!-- USB ARSENAL -->
+    <string name="usbarsenal_full_db_path_save">Full path to where you want to save the database:</string>
+    <string name="usbarsenal_full_db_path_restore">Full path of the db file from where you want to restore:</string>
+    <string name="usbarsenal_no_usb_function_enabled">No USB function has been enabled</string>
+    <string name="usbarsenal_no_image_mounted">No image is mounted.</string>
+    <string name="usbarsenal_linux_file_cd_store_gadget">Linux File-CD/Stor gadget (kernel default)</string>
+
+    <!-- SETTINGS -->
+    <string name="settings_bootanimation_path">Bootanimation path not found</string>
+    <string name="settings_set_enforcing">Set to Enforcing</string>
+    <string name="settings_selinux_disabled">SELinux is Disabled</string>
+    <string name="settings_selinux_permissive">Set to Permissive</string>
+    <string name="settings_enforcing">Enforcing</string>
+    <string name="settings_permissive">Permissive</string>
+
+    <!-- GPS -->
+    <string name="gps_permissions">gps_permissions</string>
+    <string name="gps_button_settings_description">gps_button_settings_description</string>
+    <string name="gps_current_satellites_hint">Current Satellites</string>
+    <string name="gps_bluetooth_device_text">hci0</string>
+    <string name="gps_bluetooth_device_hint">Bluetooth interface</string>
+    <string name="gps_wlan_interface_text">wlan0</string>
+    <string name="gps_wlan_interface_hint">Wireless interface</string>
+    <string name="gps_on">On</string>
+    <string name="gps_off">Off</string>
+    <string name="gps_current_satellites_null">0</string>
+    <string name="gps_rtl_sdr">RTL SDR</string>
+    <string name="gps_rtl_amr">RTL AMR</string>
+    <string name="gps_rtl_adsb">RTL ADSB</string>
+    <string name="gps_mousejack">Mousejack</string>
+    <string name="gps_settings">GPS Settings</string>
+
+    <!-- WIFI PUMPKIN3 -->
+    <string name="wp3_supported">Supported</string>
+    <string name="wp3_not_supported">Not supported</string>
+
+    <!-- EvilTwin -->
+    <string name="drawertitleeviltwin">Evil Twin</string>
+    <string name="eviltwin_setup_title">Evil Twin Setup</string>
+    <string name="eviltwin_setup_message">This seems to be the first run.\n\nEvil Twin module requires installation of required packages and the attack script.\n\nInstall the Evil Twin tools now?</string>
+    <string name="eviltwin_setup_button">Setup</string>
+    <string name="eviltwin_dismiss_button">Dismiss</string>
+    <string name="eviltwin_description">Run a fake access point portal with handshake verification using a virtually created AP. You only need an external adapter for scanning and deauthing the target network.</string>
+    <string name="action_setup">Setup</string>original
+    <string name="action_update">Update</string>
+    <string name="action_documentation">Documentation</string>
+
+    <!-- NETHUNTER FRAGMENT / APPNAVHOME -->
+    <string name="info">Information</string>
+    <string name="nethunter_full_path_save_db">Full path to where you want to save the database:</string>
+    <string name="nethunter_full_path_db_restore">Full path of the db file from where you want to restore:</string>
+
+    <!-- CARsenal -->
+    <string name="about_carsenal">About CARsenal</string>
+    <string name="audio_audio_control">Audio Control</string>
+    <string name="audio_host_hint">Host</string>
+    <string name="audio_server_host_text">127.0.0.1</string>
+    <string name="audio_text_port_hint">Port</string>
+    <string name="audio_port_text">8000</string>
+    <string name="audio_logs">LOGS</string>
+    <string name="audio_about_module">ABOUT MODULE</string>
+    <string name="audio_settings">AUDIO SETTINGS</string>
+    <string name="audio_clear_logs">Clear logs</string>
+    <string name="can_description">Configure your CAN interfaces and decode your VIN identification number.</string>
+    <string name="can_tools_desc">Unleash the power of can-utils suite, diagnose your car using Freediag and transfer CAN frames between two machines using Cannelloni!</string>
+    <string name="can_canusb_desc">Use your CAN Analyzer USB by Dumping and Sending signals using usb-can!</string>
+    <string name="can_caribou_desc">A friendly automotive security exploration tool.</string>
+    <string name="can_sim_desc">Instrument Cluster Simulator for SocketCAN (ICSim) and Unified Diagnostic Services Simulator (UDSim)</string>
+    <string name="can_msf_desc">Use Metasploit Automotive modules!</string>
+    <string name="can_app_name">MyApp</string>
+    <string name="can_settings">Settings</string>
+    <string name="can_refresh_button">Refresh</string>
+    <!-- Hardcoded String Trash Can -->
+    <!-- MAIN MENU -->
+    <string name="space">" "</string>
+    <string name="MainMenu">Main Menu</string>
+    <string name="Interface">Interface</string>
+    <string name="can0">can0</string>
+    <string name="Start">Start</string>
+    <string name="Stop">Stop</string>
+    <string name="Services">Services</string>
+    <string name="MTU">MTU</string>
+    <string name="txqueuelen">txqueuelen</string>
+    <string name="Output">Output</string>
+    <string name="LongPress">🟧 = Long press to edit command</string>
+    <string name="slcand">slcand</string>
+    <string name="hlcand">hlcand</string>
+    <string name="ldattach">ldattach</string>
+    <string name="slcan_attach">slcan_attach</string>
+    <string name="socketcand">socketcand</string>
+    <string name="RfcommBind">rfcomm bind</string>
+    <string name="RfcommConnect">rfcomm connect</string>
+    <string name="VinInfo">VIN Info</string>
+    <string name="VinNumber">4F2CU08102KM50866</string>
+    <string name="Check">Check</string>
+    <string name="Show">Show</string>
+    <!-- Basic Tools -->
+    <string name="BasicTools">Basic Tools</string>
+    <string name="RHOST">RHOST</string>
+    <string name="RHOSTValue">192.168.1.42</string>
+    <string name="LPORT">LPORT</string>
+    <string name="RPORT">RPORT</string>
+    <string name="PORTValue">1234</string>
+    <string name="Sequence">Sequence</string>
+    <string name="SequenceValue">01a#11223344AABBCCDD</string>
+    <string name="CanLogPath">/root/candump/dump.log</string>
+    <string name="CanGen">CanGen</string>
+    <string name="CanDump">CanDump</string>
+    <string name="CanSniffer">CanSniffer</string>
+    <string name="CanSend">CanSend</string>
+    <string name="CanPlayer">CanPlayer</string>
+    <string name="SequenceFinder">Seq.Finder</string>
+    <string name="Asc2Log">Asc2Log</string>
+    <string name="Log2Asc">Log2Asc</string>
+    <string name="Freediag">Freediag</string>
+    <string name="DiagTest">DiagTest</string>
+    <string name="Cannelloni">Cannelloni</string>
+    <string name="Input">Input</string>
+    <string name="Browse">Browse</string>
+    <string name="AdvancedOptions">Advanced Options</string>
+    <string name="Interactive">Interactive</string>
+    <string name="Verbose">Verbose</string>
+    <string name="LocalLoopback">Local Loopback</string>
+    <string name="CustomCommand">Custom Command</string>
+    <string name="CustomCommandValue">canbusload can0@100000 -r -t -b -c</string>
+    <string name="Run">Run</string>
+    <!-- CAN-USB -->
+    <string name="CanUSB">CAN-USB</string>
+    <string name="run">Run</string>
+    <string name="ID">ID</string>
+    <string name="Data">Data</string>
+    <string name="Counter">Counter</string>
+    <string name="Sleep">Sleep</string>
+    <string name="Mode">Mode</string>
+    <string name="Debug">Debug</string>
+    <string name="DataValue">Data (e.g., 0C1A2F3E0C1A2F3)</string>
+    <string name="Baudrate">Baudrate</string>
+    <string name="BaudrateValue">200000</string>
+    <string name="Refresh">Refresh USB</string>
+    <string name="CanSpeed">CAN Speed</string>
+    <string name="CanSpeedValue">500000</string>
+    <string name="SleepMS">Sleep (ms)</string>
+    <!-- Caring Caribou -->
+    <string name="CaringCaribou">Caring Caribou</string>
+    <string name="Message">Message</string>
+    <string name="MessageValue">0x7a0#c0.ff.ee.00.11.22.33.44</string>
+    <string name="File">File</string>
+    <string name="Loop">Loop</string>
+    <string name="Reverse">Reverse</string>
+    <string name="Pad">Pad</string>
+    <string name="CandumpFormat">CanDump Format</string>
+    <string name="Length">Length</string>
+    <string name="LengthValue">0x4800</string>
+    <string name="SeparateLine">Separate Line</string>
+    <string name="SeparateLineValue">5</string>
+    <string name="Src">Src.</string>
+    <string name="SrcValue">0x3e8</string>
+    <string name="Dst">Dst.</string>
+    <string name="DstValue">0x3e9</string>
+    <string name="Minimum">Minimum</string>
+    <string name="MinimumValue">2</string>
+    <string name="Maximum">Maximum</string>
+    <string name="MaximumValue">5</string>
+    <string name="Listener">Listener</string>
+    <string name="Dump">Dump</string>
+    <string name="Modules">Modules</string>
+    <string name="Seed">Seed</string>
+    <string name="SeedValue">0xabc123</string>
+    <string name="Min">Min.</string>
+    <string name="Max">Max.</string>
+    <string name="StartAddress">Start Address</string>
+    <string name="StartAddressValue">0x1fffb000</string>
+    <string name="Delay">Delay</string>
+    <string name="DelayValue">1</string>
+    <string name="IDValue">0x003</string>
+    <!-- ICSim -->
+    <string name="sim">Simulator</string>
+    <string name="Configuration">Configuration</string>
+    <string name="UDSimConfigFile">UDSim Config File</string>
+    <string name="UDSimConfigPath">/opt/car_hacking/udsim_vcan_config</string>
+    <!-- MSF Automotive -->
+    <string name="msfautomotive">MSF Automotive</string>
+    <string name="elmrelay">ELM327 Relay Configuration</string>
+    <string name="baudspeed">Baud Speed</string>
+    <string name="baudspeedValue">115200</string>
+
+    <!-- CARsenal About menu -->
+    <string name="about_text"><![CDATA[
+        Found a bug? A suggestion? Follow me on my networks and let me know!<br><br>
+        <b>Made with ♥️ by <a href="https://linktr.ee/v0lk3n">V0lk3n</a></b>
+        ]]>
+    </string>
+
+    <string name="credits_text" formatted="false"><![CDATA[
+        <div style="text-align:center;"><b><u>CREDITS</u></b></div>
+        <ul>
+            <li><a href="https://github.com/fenugrec"> Fenugrec</a> - Freediag tool.</li>
+            <li><a href="https://github.com/kobolt"> Kobolt</a> - CAN-USB.</li>
+            <li><a href="https://github.com/alexmohr"> Alexmohr</a> - CAN-USB Fork.</li>
+            <li><a href="https://github.com/linux-can"> Linux-Can</a> - CAN-utils and Socketcand.</li>
+            <li><a href="https://github.com/mguentner"> Mguentner</a> - Cannelloni.</li>
+            <li><a href="https://github.com/CaringCaribou"> CaringCaribou Team</a> - CaringCaribou</li>
+            <li><a href="https://github.com/zombieCraig"> zombieCraig</a> - ICSim and UDSim.</li>
+            <li><a href="https://github.com/idlesign"> idlesign</a> - VIN Info.</li>
+            <li><a href="https://www.rapid7.com/"> rapid7</a> - Metasploit Framework.</li>
+            <li><a href="https://www.crunchbase.com/person/craig-smith-12"> Craig Smith</a> - MSF Automotive Modules.</li>
+            <li><a href="https://x.com/pietro_biondi94"> Pietro Biondi</a> - MSF Automotive Modules.</li>
+            <li><a href="https://ph.linkedin.com/in/shipjayturla"> Jay Turla</a> - MSF Automotive Modules.</li>
+            <li><a href="https://x.com/johbraun"> Johannes Braun</a> - MSF Automotive Modules.</li>
+            <li><a href="https://de.linkedin.com/in/j%C3%BCrgen-d%C3%BCrrwang-75160217a"> Juergen Duerrwang</a> - MSF Automotive Modules.</li>
+        </ul>
+        ]]>
+    </string>
+
+    <!-- CARsenal MSF Modules -->
+    <string name="module_info_local_hwbridge">
+        Module Info:\n\n
+        Name: Hardware Bridge Server\n
+        Module: auxiliary/server/local_hwbridge\n
+        License: Metasploit Framework License (BSD)\n
+        Rank: Normal\n\n
+
+        Provided by:\n
+            Craig Smith\n\n
+
+        Available actions:\n
+            WebServer - Run HWBridge web server\n\n
+
+        Check supported:\n
+            No\n\n
+
+        Basic Options:\n
+            SRVHOST       (required)   - The local host or network interface to listen on. This must be an address on the local machine or 0.0.0.0 to listen on all addresses.\n
+            SRVPORT       (required)   - The local port to listen on.\n
+            SSL           (optional)   - Negotiate SSL for incoming connections\n
+            SSLCert       (optional)   - Path to a custom SSL certificate (default is randomly generated)\n
+            URIPATH       (optional)   - The URI to use for this exploit (default is random)\n
+
+        Description:\n
+            This module sets up a web server to bridge communications between
+            Metasploit and physically attached hardware.
+            Currently this module supports: automotive
+    </string>
+
+    <string name="module_info_connect">
+        Module Info:\n\n
+        Name: Hardware Bridge Session Connector\n
+        Module: auxiliary/client/hwbridge/connect\n
+        License: Metasploit Framework License (BSD)\n
+        Rank: Normal\n\n
+
+        Provided by:\n
+            Craig Smith\n\n
+
+        Module stability:\n
+            crash-safe\n\n
+
+        Check supported:\n
+            No\n\n
+
+        Basic Options:\n
+            DEBUGJSON     (optional)   - Additional debugging out for JSON requests to HW Bridge\n
+            Proxies       (optional)   - A proxy chain of format type:host:port[,type:host:port][..]\n
+            RHOSTS        (required)   - The target host(s), see https://docs.metasploit.com/docs/using-metasploit/basics/using-metasploit.html\n
+            RPORT         (required)   - The target port (TCP)\n
+            SSL           (optional)   - Negotiate SSL/TLS for outgoing connections\n
+            TARGETURI     (required)   - The path to the hwbridge API\n
+            VHOST         (optional)   - HTTP server virtual host\n\n
+
+        Description:\n
+            The Hardware Bridge (HWBridge) is a standardized method for
+            Metasploit to interact with Hardware Devices.  This extends
+            the normal exploit capabilities to the non-ethernet realm and
+            enables direct hardware and alternative bus manipulations.  You
+            must have compatible bridging hardware attached to this machine or
+            reachable on your network to use any HWBridge exploits.
+
+            Use this exploit module to connect the physical HWBridge which
+            will start an interactive hwbridge session.  You can launch a hwbridge
+            server locally by using compliant hardware and executing the local_hwbridge
+            module.  After that module has started, pass the HWBRIDGE_BASE_URL
+            options to this connector module.\n\n
+
+        References:\n
+            https://web.archive.org/web/20170206145056/http://opengarages.org/hwbridge/
+    </string>
+
+    <string name="module_info_can_flood">
+        Module Info:\n\n
+        Name: CAN Flood\n
+        Module: post/hardware/automotive/can_flood\n
+        Platform: Hardware\n
+        Arch: \n
+        Rank: Normal\n\n
+
+        Provided by:\n
+            Pietro Biondi\n\n
+
+        Module side effects:\n
+            physical-effects\n\n
+
+        Module stability:\n
+            crash-service-down\n\n
+
+        Compatible session types:\n
+            Hwbridge\n\n
+
+        Basic Options:\n
+            CANBUS     (required)   - CAN interface\n
+            FRAMELIST  (required)   - Path to frame list file\n
+            ROUNDS     (required)   - Number of executed rounds\n
+            SESSION    (required)   - The session to run this module on\n\n
+
+        Description:\n
+            This module floods a CAN interface with supplied frames.
+    </string>
+    <string name="module_info_canprobe">
+        Module Info:\n\n
+        Name: Module to Probe Different Data Points in a CAN Packet\n
+        Module: post/hardware/automotive/canprobe\n
+        Platform: Hardware\n
+        Arch: \n
+        Rank: Normal\n\n
+
+        Provided by:\n
+            Craig Smith\n\n
+
+        Module side effects:\n
+            physical-effects\n\n
+
+        Module stability:\n
+            crash-service-down\n\n
+
+        Compatible session types:\n
+            Hwbridge\n\n
+
+        Basic Options:\n
+            CANBUS     (optional)   - CAN Bus to perform scan on, defaults to connected bus\n
+            FUZZ       (optional)   - If true interates through all possible values for each data position\n
+            PADDING    (optional)   - If a value is given a full 8 bytes will be used and padded with this value\n
+            PROBEVALUE (opitonal)   - Value to inject in the data stream\n
+            SESSION    (required)   - The session to run this module on\n
+            STARTID    (optional)   - CAN ID to start scan\n
+            STOPID     (optional)   - CAN ID to stop scan\n\n
+
+        Description:\n
+            Scans between two CAN IDs and writes data at each byte position. It will
+            either write a set byte value (Default 0xFF) or iterate through all possible values
+            of that byte position (takes much longer). Does not check for responses and is
+            basically a simple blind fuzzer.
+    </string>
+    <string name="module_info_diagnostic_state">
+        Module Info:\n\n
+        Name: Diagnostic State\n
+        Module: post/hardware/automotive/diagnostic_state\n
+        Platform: Hardware\n
+        Arch: \n
+        Rank: Normal\n\n
+
+        Provided by:\n
+            Jay Turla\n\n
+
+        Module side effects:\n
+            physical-effects\n\n
+
+        Module stability:\n
+            crash-safe\n\n
+
+        Compatible session types:\n
+            Hwbridge\n\n
+
+        Basic Options:\n
+            ARBID      (optional)   - CAN ID to perform Diagnostic State\n
+            CANBUS     (optional)   - CAN Bus to perform scan on, defaults to connected bus\n
+            ROUNDS     (required)   - Number of executed rounds\n
+            SESSION    (required)   - The session to run this module on\n\n
+
+        Description:\n
+            This module will keep the vehicle in a diagnostic state on rounds by sending tester present packet.
+    </string>
+    <string name="module_info_ecu_hard_reset">
+        Module Info:\n\n
+        Name: ECU Hard Reset\n
+        Module: post/hardware/automotive/ecu_hard_reset\n
+        Platform: Hardware\n
+        Arch: \n
+        Rank: Normal\n\n
+
+        Provided by:\n
+            Jay Turla\n\n
+
+        Module side effects:\n
+            physical-effects\n\n
+
+        Module stability:\n
+            crash-service-restarts\n\n
+
+        Compatible session types:\n
+            Hwbridge\n\n
+
+        Basic Options:\n
+            ARBID      (optional)   - CAN ID to perform ECU Hard Reset\n
+            CANBUS     (optional)   - CAN Bus to perform scan on, defaults to connected bus\n
+            SESSION    (required)   - The session to run this module on\n\n
+
+        Description:\n
+            This module performs hard reset in the ECU Reset Service Identifier (0x11).
+    </string>
+    <string name="module_info_getvinfo">
+        Module Info:\n\n
+        Name: Get the Vehicle Information Such as the VIN from the Target Module\n
+        Module: post/hardware/automotive/getvinfo\n
+        Platform: Hardware\n
+        Arch: \n
+        Rank: Normal\n\n
+
+        Provided by:\n
+            Craig Smith\n\n
+
+        Module stability:\n
+            crash-safe\n\n
+
+        Compatible session types:\n
+            Hwbridge\n\n
+
+        Basic Options:\n
+            CANBUS     (optional)   - CAN Bus to perform scan on, defaults to connected bus\n
+            CLEAR_DTCS (optional)   - Clear any DTCs and reset MIL if errors are present\n
+            DSTID      (optional)   - Expected response ID, defaults to SRCID + 8\n
+            FC         (optional)   - Optinal forces flow control\n
+            PADDING    (optional)   - Optinal end of packet padding\n
+            SESSION    (required)   - The session to run this module on\n
+            SRCID      (required)   - Module ID to query\n\n
+
+        Description:\n
+            This module queries DTCs, some common engine info, and vehicle information.
+
+            It returns such things as engine speed, coolant temp, Diagnostic Trouble
+            Codes, as well as all info stored by Mode $09 Vehicle Info, VIN, etc.
+    </string>
+    <string name="module_info_identifymodules">
+        Module Info:\n\n
+        Name: Scan CAN Bus for Diagnostic Modules\n
+        Module: post/hardware/automotive/identifymodules\n
+        Platform: Hardware\n
+        Arch: \n
+        Rank: Normal\n\n
+
+        Provided by:\n
+            Craig Smith\n\n
+
+        Module stability:\n
+            crash-safe\n\n
+
+        Compatible session types:\n
+            Hwbridge\n\n
+
+        Basic Options:\n
+            CANBUS     (optional)   - CAN Bus to perform scan on, defaults to connected bus\n
+            ENDID      (required)   - End scan at this ID\n
+            SESSION    (required)   - The session to run this module on\n
+            STARTID    (required)   - Start scan from this ID\n\n
+
+        Description:\n
+            Scan the CAN bus for any modules that can respond to UDS DSC queries.
+    </string>
+    <string name="module_info_malibu_overheat">
+        Module Info:\n\n
+        Name: Sample Module to Flood Temp Gauge on 2006 Malibu\n
+        Module: post/hardware/automotive/malibu_overheat\n
+        Platform: Hardware\n
+        Arch: \n
+        Rank: Normal\n\n
+
+        Provided by:\n
+            Craig Smith\n\n
+
+        Module side effects:\n
+            screen-effects\n\n
+
+        Module stability:\n
+            service-resource-loss\n\n
+
+        Compatible session types:\n
+            Hwbridge\n\n
+
+        Basic Options:\n
+            CANBUS        (optional)   - CAN Bus to perform scan on, defaults to connected bus\n
+            PACKET_COUNT  (optional)   - How many packets to send before stopping\n
+            SESSION       (required)   - The session to run this module on\n\n
+
+        Description:\n
+            Simple sample temp flood for the 2006 Malibu.
+    </string>
+    <string name="module_info_mazda_ic_mover">
+        Module Info:\n\n
+        Name: Mazda 2 Instrument Cluster Accelorometer Mover\n
+        Module: post/hardware/automotive/mazda_ic_mover\n
+        Platform: Hardware\n
+        Arch: \n
+        Rank: Normal\n\n
+
+        Provided by:\n
+            Jay Turla\n\n
+
+        Module side effects:\n
+            screen-effects\n\n
+
+        Module stability:\n
+            service-resource-loss\n\n
+
+        Compatible session types:\n
+            Hwbridge\n\n
+
+        Basic Options:\n
+            CANBUS        (optional)   - CAN Bus to perform scan on, defaults to connected bus\n
+            SESSION       (required)   - The session to run this module on\n\n
+
+        Description:\n
+            This module moves the needle of the accelorometer and speedometer of the Mazda 2 instrument cluster.
+
+    </string>
+    <string name="module_info_pdt">
+        Module Info:\n\n
+        Name: Check For and Prep the Pyrotechnic Devices (Airbags, Battery Clamps, etc.)\n
+        Module: post/hardware/automotive/pdt\n
+        Platform: Hardware\n
+        Arch: \n
+        Rank: Normal\n\n
+
+        Provided by:\n
+            Johannes Braun\n
+            Juergen Duerrwang\n
+            Craig Smith\n\n
+
+        Module side effects:\n
+            physical-effects\n\n
+
+        Module stability:\n
+            crash-safe\n\n
+
+        Compatible session types:\n
+            Hwbridge\n\n
+
+        Basic Options:\n
+            CANBUS       (optional)   - CAN Bus to perform scan on, defaults to connected bus\n
+            DSTID        (optional)   - Expected response ID, defaults to SRCID + 8\n
+            PADDING      (optional)   - Pad the packet with extra bytes to always be 8 bytes long\n
+            SESSION      (required)   - The session to run this module on\n
+            SRCID        (required)   - Module ID to query\n\n
+
+        Description:\n
+            Acting in the role of a Pyrotechnical Device Deployment Tool (PDT), this module
+            will first query all Pyrotechnic Control Units (PCUs) in the target vehicle
+            to discover how many pyrotechnic devices are present, then attempt to validate
+            the security access token using the default simplified algorithm.  On success,
+            the vehicle will be in a state that is prepped to deploy its pyrotechnic devices
+            (e.g. airbags, battery clamps, etc.) via the service routine. (ISO 26021)
+
+            References:
+                https://nvd.nist.gov/vuln/detail/CVE-2017-14937
+                https://www.researchgate.net/publication/321183727_Security_Evaluation_of_an_Airbag-ECU_by_Reusing_Threat_Modeling_Artefacts
+
+    </string>
+    <string name="module_set_local_hwbridge">
+        \nOptions :\n
+        \nSRVHOST|0.0.0.0|required
+        \nSRVPORT|8080|required
+        \nSSL|false|optional
+        \nSSLCert||optional
+        \nURIPATH||optional
+        \nAdvanced Options :\n
+        \nListenerBindAddress||optional
+        \nListenerBindPort||optional
+        \nListenerComm||optional
+        \nSSLCipher||optional
+        \nSSLCompression|false|optional
+        \nSSLVersion|Auto|optional
+        \nSendRobots|false|optional
+        \nURIHOST||optional
+        \nURIPORT||optional
+        \nVERBOSE|false|optional
+        \nWORKSPACE||optional
+    </string>
+    <string name="module_set_connect">
+        \nOptions :\n
+        \nDEBUGJSON|false|optional
+        \nProxies||optional
+        \nRHOSTS|127.0.0.1|required
+        \nRPORT|8080|required
+        \nSSL|false|optional
+        \nTARGETURI|/|required
+        \nVHOST||optional
+        \nAdvanced Options :\n
+        \nDOMAIN|WORKSTATION|required
+        \nDigestAuthIIS|true|optional
+        \nFingerprintCheck|true|optional
+        \nHttpClientTimeout||optional
+        \nHttpPassword||optional
+        \nHttpRawHeaders||optional
+        \nHttpTrace|false|optional
+        \nHttpTraceColors|red/blu|optional
+        \nHttpTraceHeadersOnly|false|optional
+        \nHttpUsername||optional
+        \nSSLKeyLogFile||optional
+        \nSSLServerNameIndication||optional
+        \nSSLVersion|Auto|required
+        \nUserAgent||optional
+        \nVERBOSE|false|optional
+        \nWORKSPACE||optional
+    </string>
+    <string name="module_set_can_flood">
+        \nOptions :\n
+        \nCANBUS||required
+        \nFRAMELIST|/usr/share/metasploit-framework/data/wordlists/can_flood_frames.txt|required
+        \nROUNDS|200|required
+        \nSESSION||required
+        \nAdvanced Options :\n
+        \nVERBOSE|false|optional
+        \nWORKSPACE||optional
+    </string>
+    <string name="module_set_canprobe">
+        \nOptions :\n
+        \nCANBUS||optional
+        \nFUZZ|false|optional
+        \nPADDING||optional
+        \nPROBEVALUE|255|optional
+        \nSESSION||required
+        \nSTARTID|768|optional
+        \nSTOPID||optional
+        \nAdvanced Options :\n
+        \nVERBOSE|false|optional
+        \nWORKSPACE||optional
+    </string>
+    <string name="module_set_diagnostic_state">
+        \nOptions :\n
+        \nARBID|0x7DF|optional
+        \nCANBUS||optional
+        \nROUNDS|500|required
+        \nSESSION||required
+        \nAdvanced Options :\n
+        \nVERBOSE|false|optional
+        \nWORKSPACE||optional
+    </string>
+    <string name="module_set_ecu_hard_reset">
+        \nOptions :\n
+        \nARBID|0x7DF|optional
+        \nCANBUS||optional
+        \nSESSION||required
+        \nAdvanced Options :\n
+        \nVERBOSE|false|optional
+        \nWORKSPACE||optional
+    </string>
+    <string name="module_set_getvinfo">
+        \nOptions :\n
+        \nCANBUS||optional
+        \nCLEAR_DTCS|false|optional
+        \nDSTID|2024|optional
+        \nFC|false|optional
+        \nPADDING||optional
+        \nSESSION||required
+        \nSRCID|2016|required
+        \nAdvanced Options :\n
+        \nVERBOSE|false|optional
+        \nWORKSPACE||optional
+    </string>
+    <string name="module_set_identifymodules">
+        \nOptions :\n
+        \nCANBUS||optional
+        \nENDID|2039|required
+        \nSESSION||required
+        \nSTARTID|1536|required
+        \nAdvanced Options :\n
+        \nVERBOSE|false|optional
+        \nWORKSPACE||optional
+    </string>
+    <string name="module_set_malibu_overheat">
+        \nOptions :\n
+        \nCANBUS||optional
+        \nPACKET_COUNT|200|optional
+        \nSESSION||required
+        \nAdvanced Options :\n
+        \nVERBOSE|false|optional
+        \nWORKSPACE||optional
+    </string>
+    <string name="module_set_mazda_ic_mover">
+        \nOptions :\n
+        \nCANBUS||optional
+        \nSESSION||required
+        \nAdvanced Options :\n
+        \nVERBOSE|false|optional
+        \nWORKSPACE||optional
+    </string>
+    <string name="module_set_pdt">
+        \nOptions :\n
+        \nCANBUS||optional
+        \nDSTID|2041|optional
+        \nPADDING|0|optional
+        \nSESSION||required
+        \nSRCID|2033|required
+        \nAdvanced Options :\n
+        \nVERBOSE|false|optional
+        \nWORKSPACE||optional
+    </string>
+    <string name="settings_set_to_enforcing">Set to Enforcing</string>
+    <string name="settings_selinux_is_disabled">SELinux is Disabled</string>
+    <string name="settings_set_to_permissive">Set to Permissive</string>
+    <string name="settings_string_enforcing">Enforcing</string>
+    <string name="settings_string_set_to_enforcing">Set to Enforcing</string>
+    <string name="settings_string_permissive">Permissive</string>
+    <string name="settings_bootanimation_path_not_found">Bootanimation path not found</string>
+    <string name="action_debug">kex_debug_title</string>
+    <string name="vnc_apply_button">Apply</string>
+    <string name="vnc_remove_selected_resolution">Remove selected resolution</string>
+    <string name="vnc_new_resolution">New resolution</string>
+    <string name="vnc_reset_button">Reset</string>
+    <string name="vnc_backup_button">Backup</string>
+    <string name="vnc_restore_button">Restore</string>
+    <string name="vnc_device_resolution_for_hdmi">DEVICE RESOLUTION FOR HDMI</string>
+    <string name="vnc_immersive_mode">IMMERSIVE MODE</string>
+    <string name="vnc_remove_selected_kali_user">Remove selected Kali user</string>
+    <string name="vnc_add_new_kali_user">Add new Kali user</string>
+    <string name="vnc_manage_kali_users">MANAGE KALI USERS</string>
+    <string name="vnc_restore_resolutions_button">Restore</string>
+    <string name="vnc_backup_resolutions_button">Backup</string>
+    <string name="vnc_new_resolution_button">New resolution</string>
+    <string name="vnc_remove_selected_resolution_button">Remove selected resolution</string>
+    <string name="vnc_kex_server_resolution_optional">KEX SERVER RESOLUTION (OPTIONAL)</string>
+    <string name="vnc_show_advanced_settings_button">SHOW ADVANCED SETTINGS</string>
+    <string name="vnc_open_kex_client">OPEN KEX CLIENT</string>
+    <string name="vnc_active_sessions">Active Sessions:</string>
+    <string name="vnc_content_description_none">none</string>
+    <string name="vnc_kex_server_status">KeX Server Status:</string>
+    <string name="vnc_stop_server_button">Stop Server</string>
+    <string name="vnc_start_server_button">Start Server</string>
+    <string name="vnc_enable_audio_button">Enable audio</string>
+    <string name="vnc_display_text">DISPLAY:</string>
+    <string name="vnc_user_text">USER:</string>
+    <string name="vnc_delay_time">Delay Time</string>
+    <string name="vnc_start_delay_checkbox">Start Delay</string>
+    <string name="vnc_localhost_only">Localhost Only</string>
+    <string name="vnc_enable_at_boot">Enable at boot</string>
+    <string name="vnc_setup_local_server">Setup Local Server</string>
+    <string name="vnc_delay_start_timer">20</string>
+    <string name="vnc_close_button">Close</string>
+    <string name="vnc_information_menu_button">Information</string>
+    <string name="nethunter_full_path_savedb">Full path to where you want to save the database:</string>
+    <string name="nethunter_full_path_restoredb">Full path of the db file from where you want to restore:</string>
+    <string name="can_hide_services">Hide Services</string>
+    <string name="can_services">Services</string>
+    <string name="can_hide_configuration">Hide Configuration</string>
+    <string name="can_configuration">Configuration</string>
+    <string name="can_hide_advanced_options">Hide Advanced Options</string>
+    <string name="can_advanced_options">Advanced Options</string>
+    <string name="can_elm327_relay_configuration">ELM327 Relay Configuration</string>
+    <string name="can_no_options_for_module">No options available for this module.</string>
+    <string name="customcommands_full_path_db_restore">Full path of the db file from where you want to restore:</string>
+    <string name="customcommands_full_path_db_save">Full path to where you want to save the database:</string>
+    <string name="usb_no_usb_function_enabled">No USB function has been enabled</string>
+    <string name="usb_no_image_mounted">No image is mounted.</string>
+    <string name="usb_linux_file_cd_storage_gadget">Linux File-CD/Stor gadget (kernel default)</string>
+    <string name="usb_full_path_db_save">Full path to where you want to save the database:</string>
+    <string name="usb_full_path_db_restore">Full path of the db file from where you want to restore:</string>
+    <string name="usb_exfil_description">Deploys an HTTP server and raw TCP listener to exfiltrate files from a connected USB target via RNDIS.</string>
+    <string name="wp3_ap_mode_supported">Supported</string>
+    <string name="wp3_ap_mode_not_supported">Not supported</string>
+    <string name="audio_permission_denied_cannot_start_playback">Audio permission denied. Cannot start playback.</string>
+    <string name="notification_permission_denied">audio_notification_permission_denied</string>
+    <string name="drawertitleterminal">Terminal</string>
+    <string name="nethunter_refresh">Refresh</string>
+    <string name="nethunter_add">Add</string>
+    <string name="nethunter_delete">Delete</string>
+    <string name="nethunter_move">Move</string>
+    <string name="nethunter_system_information">SYSTEM INFORMATION</string>
+    <string name="new_app_build_detected">New app build detected:</string>
+    <string name="copying_new_files">Copying new files…</string>
+
+    <!-- TTS Voice Model-->
+    <string-array name="tts_voices">
+        <item>Voice model</item>
+        <item>en-us</item>
+        <item>en-uk</item>
+        <item>en+f3</item>
+        <item>en+m3</item>
+        <item>en-sc</item>
+    </string-array>
+
+    <!-- TTS Speed -->
+    <string-array name="tts_speeds">
+        <item>Voice speed</item>
+        <item>120</item>
+        <item>150</item>
+        <item>180</item>
+        <item>200</item>
+        <item>250</item>
+    </string-array>
+
+    <!-- TTS Messages-->
+    <string-array name="tts_phrases">
+        <item>Choose Message</item>
+        <item>You have been compromised. Enjoy the chaos.</item>
+        <item>Bluetooth access hijacked. This is not a drill.</item>
+        <item>This is a demonstration of total control.</item>
+        <item>Your system is no longer yours.</item>
+    </string-array>
+
+    <!-- NFC -->
+    <string name="nfc_main_desc">
+        NFC Arsenal allows you to scan, read, write, dump, and analyze NFC tags.
+        Advanced features integrate with Kali NetHunter for penetration testing.
+    </string>
+
+    <string name="nfc_tools_desc">
+        Install and manage NFC-related tools inside the Kali NetHunter chroot
+        such as libnfc, mfoc, mfcuk, and nfc-tools.
+    </string>
+
+    <!-- Terminal Setup Dialog -->
+    <string name="terminal_setup_icon_desc">Setup</string>
+    <string name="terminal_setup_title">Terminal setup</string>
+    <string name="terminal_setup_desc">We will prepare your environment for the best experience. This will run apt update and install core extras.</string>
+    <string name="terminal_setup_chip_update">apt update</string>
+    <string name="terminal_setup_chip_install_neowofetch">apt install neowofetch</string>
+    <string name="terminal_setup_later">Later</string>
+    <string name="terminal_setup_setup">Setup</string>
+    <string name="terminal_setup_setting_up">Setting up…</string>
+
+    <string name="terminal_initial_command">Initial Command</string>
+    <string name="terminal_initial_command_icon_desc">Initial command</string>
+    <string name="terminal_initial_command_desc">Configure a command to run automatically when opening the Terminal. Disable it if you prefer to start with a blank prompt.</string>
+    <string name="terminal_initial_command_enable">Enable initial command</string>
+    <string name="terminal_initial_command_hint">e.g., neowofetch</string>
+    <string name="terminal_initial_command_saved">Initial command saved</string>
+    <string name="presets">Presets</string>
+    <string name="terminal_preset_uname">uname -a</string>
+    <string name="terminal_preset_neowofetch">neowofetch || neofetch</string>
+    <string name="terminal_preset_clear">clear</string>
+    <string name="terminal_preset_ls">ls -la</string>
+    <string name="terminal_preset_whoami">whoami</string>
+    <string name="terminal_save">Save</string>
+    <string name="terminal_button_ctrl">CTRL</string>
+    <string name="terminal_button_clear">Clear</string>
+    <string name="terminal_button_arrow_down">▼</string>
+    <string name="terminal_button_arrow_up">▲</string>
+    <string name="terminal_button_arrow_right">→</string>
+    <string name="terminal_button_arrow_left">←</string>
+    <string name="terminal_button_goto_bottom">Go to bottom</string>
+    <string name="terminal_button_tab">Tab</string>
+    <string name="terminal_label_theme">Theme</string>
+    <string name="terminal_title_preview">Preview</string>
+    <string name="terminal_title_layout">Layout</string>
+    <string name="terminal_stop_sessions">Stop Session</string>
+    <string name="terminal_button_esc">ESC</string>
+    <string name="terminal_text_copy">Copy</string>
+    <string name="terminal_copy_selected">Copy selected lines</string>
+
+    <!-- WearHunter -->
+    <string name="wearhunter">WearHunter</string>
+    <string name="adb_shell">ADB Shell</string>
+    <string name="adb_input">ADB Input</string>
+    <string name="adb_install">ADB Install</string>
+    <string name="about_wearhunter">About WearHunter</string>
+    <string name="wearhunter_description">This module allow you to take control over your NetHunter Watch using ADB over WiFi or Bluetooth.</string>
+    <string name="wearhunter_watch_ip_hint">Watch IP</string>
+    <string name="wearhunter_watch_ip_text">192.168.1.10</string>
+    <string name="wearhunter_watch_port_hint">Watch Port</string>
+    <string name="wearhunter_watch_port_text">5555</string>
+    <string name="btn_adb_connect">Connect</string>
+    <string name="btn_adb_disconnect">Disconnect</string>
+    <string name="btn_adb_devices">Devices</string>
+    <string name="btn_adb_setprop">setprop service.adb.tcp.port</string>
+    <string name="btn_adbd_start">ADBD Start</string>
+    <string name="btn_adbd_stop">ADBD Stop</string>
+    <string name="btn_adb_start">ADB Server Start</string>
+    <string name="btn_adb_kill">ADB Server Kill</string>
+    <string name="wearhunter_output">Output</string>
+    <string name="wearhunter_clear_output">Clear</string>
+    <string name="wearhunter_interactive_bootkali">NetHunter Watch Interactive Shell</string>
+    <string name="btn_open_nhapp">Launch NHApp</string>
+    <string name="btn_open_nhterm">Launch NHTerm</string>
+    <string name="btn_write_text">Write Text</string>
+    <string name="btn_enter_keyevent">Enter Keyevent</string>
+    <string name="wearhunter_watch_text_hint">Write Text on Watch</string>
+    <string name="wearhunter_watch_text_text">whoami</string>
+    <string name="adb_shell_cmd_hint">ADB Shell Command</string>
+    <string name="adb_shell_cmd_text">uname -a</string>
+    <string name="btn_run_adb">Run</string>
+    <string name="btn_run_as_root_adb">Run As Root</string>
+    <string name="wearhunter_apk_path_hint">APK Path</string>
+    <string name="wearhunter_apk_path">/sdcard/Hijacker-release-v1.7.apk</string>
+    <string name="wearhunter_install_apk">Install</string>
+    <string name="btn_adb_tcpip">ADB TCP/IP</string>
+    <string name="btn_adb_forward_adbhub">Forward adb-hub</string>
+
+</resources>

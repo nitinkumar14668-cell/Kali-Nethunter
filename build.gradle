@@ -1,0 +1,142 @@
+apply plugin: 'com.android.application'
+
+/* tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs += ['-Xlint:deprecation', '-Xlint:unchecked']
+    options.deprecation = true
+    Optional: fail the build on warnings
+    options.compilerArgs += ['-Werror']
+} */
+
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url "https://chaquo.com/maven" }
+    }
+    dependencies {
+        //noinspection AndroidGradlePluginVersion
+        classpath 'com.android.tools.build:gradle:8.9.3'
+    }
+}
+
+repositories {
+    google()
+    mavenCentral()
+    maven { url "https://repo.grails.org/grails/plugins" }
+    // Snowfall
+    maven { url 'https://jitpack.io' }
+    maven { url "https://chaquo.com/maven" }
+}
+
+android {
+    namespace "com.offsec.nethunter"
+    //noinspection GradleDependency,ExpiredCompileSdkVersion
+    compileSdk 34
+
+    buildFeatures {
+        dataBinding true
+        aidl true
+        buildConfig true
+        //compose true
+        // for view binding:
+        // viewBinding true
+    }
+
+    // Enable CMake/NDK build of libnative-lib.so
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+        coreLibraryDesugaringEnabled true
+    }
+
+    defaultConfig {
+        minSdk 21
+        //noinspection OldTargetApi,ExpiredTargetSdkVersion
+        targetSdk 34
+        //noinspection HighAppVersionCode
+        //version=YYYYMMVVRR (Either "VV" for stable version OR "RR" for pre-release candidate (e.g. 0001 for rc1))
+        versionCode 2026090200   // 2026-09(Sep).02
+        versionName '2026.3'
+        multiDexEnabled true
+        applicationId "com.offsec.nethunter"
+
+        // Build and package the native library for common ABIs (at minimum arm64-v8a)
+        ndk {
+            abiFilters 'arm64-v8a', 'armeabi-v7a', 'x86_64', 'x86'
+        }
+
+        externalNativeBuild {
+            cmake {
+                // cppFlags "-O2"
+            }
+        }
+    }
+
+    signingConfigs {
+        debug {
+            storeFile file('nethunter-debug.jks')
+            keyAlias 'nethunter'
+            storePassword 'nethunter'
+            keyPassword 'nethunter'
+        }
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+            aidl.srcDirs = ['src']
+            renderscript.srcDirs = ['src']
+            res.srcDirs = ['res']
+            assets.srcDirs = ['assets']
+            // If you later add prebuilt .so files, place them under src/main/jniLibs/<abi>/
+        }
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+            jniDebuggable true
+            buildConfigField "java.util.Date", "BUILD_TIME", "new java.util.Date(" + System.currentTimeMillis() + "L)"
+            buildConfigField "String", "BUILD_NAME", "\"" + System.getenv("USER") + "\""
+        }
+
+        release {
+            //signingConfig signingConfigs.release
+            minifyEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android.txt')
+            debuggable false
+            jniDebuggable false
+            buildConfigField "java.util.Date", "BUILD_TIME", "new java.util.Date(" + System.currentTimeMillis() + "L)"
+            buildConfigField "String", "BUILD_NAME", "\"" + System.getenv("USER") + "\""
+        }
+    }
+}
+
+dependencies {
+    implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
+    implementation 'org.thoughtcrime.ssl.pinning:AndroidPinning:1.0.0'
+    implementation 'com.google.android.gms:play-services-location:21.3.0'
+    implementation 'joda-time:joda-time:2.14.0'
+    implementation 'com.google.guava:guava:33.5.0-android'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.9.4'
+    implementation 'androidx.lifecycle:lifecycle-livedata:2.9.4'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'com.google.android.material:material:1.13.0'
+    implementation 'androidx.preference:preference:1.2.1'
+    implementation 'androidx.viewpager2:viewpager2:1.1.0'
+    implementation 'androidx.navigation:navigation-runtime:2.9.5'
+    // Snowfall
+    implementation 'com.github.jetradarmobile:android-snowfall:1.2.1'
+    //debugImplementation 'com.squareup.leakcanary:leakcanary-android:3.0-alpha-8'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
+}

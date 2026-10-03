@@ -1,0 +1,286 @@
+package com.offsec.nethunter.SQL;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Environment;
+import android.text.TextUtils;
+import android.util.Log;
+
+import com.offsec.nethunter.BuildConfig;
+import com.offsec.nethunter.models.NethunterModel;
+import com.offsec.nethunter.utils.VulkanChecker;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
+import java.util.ArrayList;
+import java.util.List;
+
+public class NethunterSQL extends SQLiteOpenHelper {
+    private final Context context;
+    private static final String DATABASE_NAME = "NethunterFragment";
+    private static final int DATABASE_VERSION = 2;
+    private static NethunterSQL instance;
+    public static final String TAG = "NethunterSQL";
+    private static final String TABLE_NAME = DATABASE_NAME;
+    private static final ArrayList<String> COLUMNS = new ArrayList<>();
+    static {
+        COLUMNS.add("id");
+        COLUMNS.add("TitleName");
+        COLUMNS.add("CommandforResult");
+        COLUMNS.add("Delimiter");
+        COLUMNS.add("RunOnCreate");
+    }
+    private static final String[][] nethunterData = {
+            {"1", "Kernel Version", "uname -a", "\\n", "1"},
+            {"2", "Busybox Version", "busybox_nh | head -n1", "\\n", "1"},
+            {"3", "Root Status", "su -v", "\\n", "1"},
+            {"4", "HID Status", "[ -n \"$(ls /dev/hidg* 2>/dev/null)\" ] && ls /dev/hidg* || { echo \"HID interface not found.\"; if [[ $(uname -r | cut -d. -f1) -ge 4 ]]; then echo \"Please enable in USB Arsenal.\"; fi }", "\\n", "1"},
+            {"5", "CAN Status", "busybox_nh ip -o link show | awk -F': ' '{print $2}' | grep -E '^(can|vcan|slcan)[0-9]+$' || echo \"CAN interface not found.\nPlease enable in CARsenal.\"", "\\n", "1"},
+            {"6", "NetHunter Terminal Status", "[ \"$(pm list packages | grep 'com.offsec.nhterm')\" ] && echo \"NetHunter Terminal is installed.\" || echo \"NetHunter Terminal is NOT installed.\"", "\\n", "1"},
+            {"7", "Network Interface Status", "ip -o addr show | busybox_nh awk '{print $2, $3, $4}'", "\\n", "1"},
+            {"8", "External IP", "busybox_nh which wget > /dev/null 2>&1 && busybox_nh wget -qO - icanhazip.com || curl -s ipv4.icanhazip.com", "\\n", "0"}
+    };
+
+    public static synchronized NethunterSQL getInstance(Context context) {
+        if (instance == null) {
+            instance = new NethunterSQL(context.getApplicationContext());
+        }
+        return instance;
+    }
+
+    private NethunterSQL(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context = context;
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE " + TABLE_NAME + " (" + COLUMNS.get(0) + " INTEGER, " +
+                COLUMNS.get(1) + " TEXT, " + COLUMNS.get(2) +  " TEXT, " + COLUMNS.get(3) + " TEXT, " + COLUMNS.get(4) + " TEXT)");
+        ContentValues initialValues = new ContentValues();
+        db.beginTransaction();
+        for (String[] data: nethunterData){
+            initialValues.put(COLUMNS.get(0), data[0]);
+            initialValues.put(COLUMNS.get(1), data[1]);
+            initialValues.put(COLUMNS.get(2), data[2]);
+            initialValues.put(COLUMNS.get(3), data[3]);
+            initialValues.put(COLUMNS.get(4), data[4]);
+            db.insert(TABLE_NAME, null, initialValues);
+        }
+        db.setTransactionSuccessful();
+        db.endTransaction();
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        this.onCreate(db);
+    }
+
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        Log.w(TAG, "Downgrading database from version " + oldVersion + " to " + newVersion + ", resetting schema.");
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        onCreate(db);
+    }
+
+    public List<NethunterModel> bindData(List<NethunterModel> nethunterModelArrayList) {
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME + " ORDER BY " + COLUMNS.get(0) + ";", null);
+        while (cursor.moveToNext()) {
+            int columnIndex1 = cursor.getColumnIndex(COLUMNS.get(1));
+            int columnIndex2 = cursor.getColumnIndex(COLUMNS.get(2));
+            int columnIndex3 = cursor.getColumnIndex(COLUMNS.get(3));
+            int columnIndex4 = cursor.getColumnIndex(COLUMNS.get(4));
+
+            String columnValue1 = columnIndex1 != -1 ? cursor.getString(columnIndex1) : null;
+            String columnValue2 = columnIndex2 != -1 ? cursor.getString(columnIndex2) : null;
+            String columnValue3 = columnIndex3 != -1 ? cursor.getString(columnIndex3) : null;
+            String columnValue4 = columnIndex4 != -1 ? cursor.getString(columnIndex4) : null;
+
+            // Check for GPU Info row
+            if ("GPU Info".equals(columnValue1) && "vulkan_check".equals(columnValue2)) {
+                boolean supported = VulkanChecker.isVulkanSupported(context);
+                columnValue2 = supported ? "Vulkan supported" : "Vulkan NOT supported";
+                columnValue4 = "0"; // Prevent accidental execution as a shell command
+            } else if ("vulkan_check".equals(columnValue2)) {
+                columnValue2 = "Invalid command: vulkan_check";
+            }
+
+            nethunterModelArrayList.add(new NethunterModel(
+                    columnValue1,
+                    columnValue2,
+                    columnValue3,
+                    columnValue4,
+                    "".split("\\n")
+            ));
+        }
+        cursor.close();
+        db.close();
+        return nethunterModelArrayList;
+    }
+
+    public void addData(int targetPositionId, List<String> addData){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues initialValues = new ContentValues();
+        db.execSQL("UPDATE " + TABLE_NAME + " SET " + COLUMNS.get(0) + " = " + COLUMNS.get(0) + " + 1 WHERE " + COLUMNS.get(0) + " >= " + targetPositionId + ";");
+        initialValues.put(COLUMNS.get(0), targetPositionId);
+        initialValues.put(COLUMNS.get(1), addData.get(0));
+        initialValues.put(COLUMNS.get(2), addData.get(1));
+        initialValues.put(COLUMNS.get(3), addData.get(2));
+        initialValues.put(COLUMNS.get(4), addData.get(3));
+        db.beginTransaction();
+        db.insert(TABLE_NAME, null, initialValues);
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
+    }
+
+    public void deleteData(List<Integer> selectedTargetIds){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM " + TABLE_NAME + " WHERE " + COLUMNS.get(0) + " in (" + TextUtils.join(",", selectedTargetIds) + ");");
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME + " ORDER BY " + COLUMNS.get(0) + ";", null);
+
+        while (cursor.moveToNext()) {
+            db.execSQL("UPDATE " + TABLE_NAME + " SET " + COLUMNS.get(0) + " = " + cursor.getPosition() + " + 1 WHERE " + COLUMNS.get(0) + " = " + cursor.getInt(0) + ";");
+        }
+        cursor.close();
+        db.close();
+    }
+
+    public void moveData(Integer originalPosition, Integer targetPosition){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("UPDATE " + TABLE_NAME + " SET " + COLUMNS.get(0) + " = -1 WHERE " + COLUMNS.get(0) + " = " + (originalPosition + 1) + ";");
+        if (originalPosition < targetPosition) {
+            db.execSQL("UPDATE " + TABLE_NAME + " SET " + COLUMNS.get(0) + " = " + COLUMNS.get(0) + " - 1 WHERE " + COLUMNS.get(0) + " > " +
+                    (originalPosition + 1) + " AND " + COLUMNS.get(0) + " <= " + (targetPosition + 1) + ";");
+        } else {
+            db.execSQL("UPDATE " + TABLE_NAME + " SET " + COLUMNS.get(0) + " = " + COLUMNS.get(0) + " + 1 WHERE " + COLUMNS.get(0) + " > " +
+                    targetPosition + " AND " + COLUMNS.get(0) + " <= " + (originalPosition + 1) + ";");
+        }
+        db.execSQL("UPDATE " + TABLE_NAME + " SET " + COLUMNS.get(0) + " = " + (targetPosition + 1) + " WHERE " + COLUMNS.get(0) + " = -1;");
+        db.close();
+    }
+
+    public void editData(Integer targetPosition, List<String> editData){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("UPDATE " + TABLE_NAME + " SET " + COLUMNS.get(1) + " = '" + editData.get(0).replace("'", "''") + "', " +
+                COLUMNS.get(2) + " = '" + editData.get(1).replace("'", "''") + "', " +
+                COLUMNS.get(3) + " = '" + editData.get(2).replace("'", "''") + "', " +
+                COLUMNS.get(4) + " = '" + editData.get(3).replace("'", "''") + "'" +
+                " WHERE " + COLUMNS.get(0) + " = " + (targetPosition + 1));
+        db.close();
+    }
+
+    public void resetData(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        db.execSQL("CREATE TABLE " + TABLE_NAME + " (" + COLUMNS.get(0) + " INTEGER, " +
+                COLUMNS.get(1) + " TEXT, " + COLUMNS.get(2) +  " TEXT, " + COLUMNS.get(3) + " TEXT, " + COLUMNS.get(4) + " TEXT)");
+        ContentValues initialValues = new ContentValues();
+        db.beginTransaction();
+        for (String[] data: nethunterData){
+            initialValues.put(COLUMNS.get(0), data[0]);
+            initialValues.put(COLUMNS.get(1), data[1]);
+            initialValues.put(COLUMNS.get(2), data[2]);
+            initialValues.put(COLUMNS.get(3), data[3]);
+            initialValues.put(COLUMNS.get(4), data[4]);
+            db.insert(TABLE_NAME, null, initialValues);
+        }
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
+    }
+
+    public String backupData(String storedDBpath) {
+        try {
+            File data = Environment.getDataDirectory();
+            File sd = Environment.getExternalStorageDirectory();
+            String currentDBPath = data.getAbsolutePath() + "/data/" + BuildConfig.APPLICATION_ID + "/databases/" + getDatabaseName();
+            if (sd.canWrite()) {
+                File currentDB = new File(currentDBPath);
+                File backupDB = new File(storedDBpath);
+                if (currentDB.exists()) {
+                    try (FileInputStream fis = new FileInputStream(currentDB);
+                         FileChannel src = fis.getChannel();
+                         FileOutputStream fos = new FileOutputStream(backupDB);
+                         FileChannel dst = fos.getChannel()) {
+                        dst.transferFrom(src, 0, src.size());
+                    }
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "backupData failed", e);
+            return e.toString();
+        }
+        return null;
+    }
+
+    public String restoreData(String storedDBpath) {
+        if (!new File(storedDBpath).exists()) {
+            return "db file not found.";
+        }
+        if (!verifyDB(storedDBpath)) {
+            return "invalid columns format.";
+        }
+        try {
+            File data = Environment.getDataDirectory();
+            File sd = Environment.getExternalStorageDirectory();
+            String currentDBPath = data.getAbsolutePath() + "/data/" + BuildConfig.APPLICATION_ID + "/databases/" + getDatabaseName();
+            if (sd.canWrite()) {
+                File currentDB = new File(currentDBPath);
+                File backupDB = new File(storedDBpath);
+                if (backupDB.exists()) {
+                    try (FileInputStream fis = new FileInputStream(backupDB);
+                         FileChannel src = fis.getChannel();
+                         FileOutputStream fos = new FileOutputStream(currentDB);
+                         FileChannel dst = fos.getChannel()) {
+                        dst.transferFrom(src, 0, src.size());
+                    } catch (FileNotFoundException e) {
+                        Log.e(TAG, "restoreData file not found: " + storedDBpath, e);
+                        return "File not found: " + e.getMessage();
+                    } catch (IOException e) {
+                        Log.e(TAG, "restoreData I/O error while copying db from: " + storedDBpath, e);
+                        return "I/O error: " + e.getMessage();
+                    }
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "restoreData unexpected error", e);
+            return e.toString();
+        }
+        return null;
+    }
+
+    private boolean verifyDB(String storedDBpath){
+        SQLiteDatabase tempDB = SQLiteDatabase.openDatabase(storedDBpath, null, SQLiteDatabase.OPEN_READWRITE);
+        Cursor c = tempDB.rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='" + TABLE_NAME + "'", null);
+        if (c.getCount()==1){
+            c.close();
+            c = tempDB.query(TABLE_NAME, null, null, null, null, null, null);
+            String[] tempColumnNames = c.getColumnNames();
+            c.close();
+            if (tempColumnNames.length != COLUMNS.size()) {
+                tempDB.close();
+                return false;
+            }
+            for (int i = 0; i < tempColumnNames.length; i++){
+                if (!tempColumnNames[i].equals(COLUMNS.get(i))){
+                    tempDB.close();
+                    return false;
+                }
+            }
+            tempDB.close();
+            return true;
+        }
+        tempDB.close();
+        return false;
+    }
+}

